@@ -30,9 +30,10 @@ public class GamePlatform
     //Main GUI
     private static final JFrame frame = new JFrame("Card Game Platform - Team 5");
     protected static final JPanel table = new JPanel();
-    //other components
+    //Rules and Stats buttons
     private static JButton showRulesButton = new JButton("Show Rules");
     private static JButton showStatsButton = new JButton("My Stats");
+    //Run gmae buttons
     private static JButton eo_GameButton = new JButton("Play Even and Odd");
     private static JButton k_GameButton = new JButton("Play Klondike");
     private static JButton ew_GameButton = new JButton("Play Eagle Wing");
