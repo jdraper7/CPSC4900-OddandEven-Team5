@@ -37,7 +37,7 @@ public class GamePlatform
     private static JButton k_GameButton = new JButton("Play Klondike");
     private static JButton ew_GameButton = new JButton("Play Eagle Wing");
     private static JButton e_GameButton = new JButton("Play Easthaven");
-    private static JButton eightoff_GameButton = new JButton("Play Eight Off");
+    private static JButton eoff_GameButton = new JButton("Play Eight Off");
     private static JButton ex_GameButton = new JButton("Play Exit");
 
 }
