@@ -29,7 +29,7 @@ public class GamePlatform
 
     //Main GUI
     private static final JFrame frame = new JFrame("Card Game Platform - Team 5");
-    protected static final JPanel table = JPanel();
+    protected static final JPanel table = new JPanel();
     //other components
     private static JButton showRulesButton = new JButton("Show Rules");
     private static JButton eo_GameButton = new JButton("Play Even and Odd");
