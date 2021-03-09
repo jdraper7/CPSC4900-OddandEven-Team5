@@ -32,6 +32,7 @@ public class GamePlatform
     protected static final JPanel table = new JPanel();
     //other components
     private static JButton showRulesButton = new JButton("Show Rules");
+    private static JButton showStatsButton = new JButton("My Stats");
     private static JButton eo_GameButton = new JButton("Play Even and Odd");
     private static JButton k_GameButton = new JButton("Play Klondike");
     private static JButton ew_GameButton = new JButton("Play Eagle Wing");
