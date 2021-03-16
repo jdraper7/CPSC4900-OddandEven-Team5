@@ -37,9 +37,9 @@ public class EOSolitaire
 	private static EOCardStack deck; // populated with standard 52 card deck
 	private static EOCardStack[] tableau; // Tableau stacks
 	private static EOCardStack[] reserve; // Reserve stacks
-	private static FinalStack[] foundationA;// FoundationA Stacks
-	private static FinalStack[] foundationB;// FoundationB Stacks
-	private static WasteStack waste;// waste card spot
+	private static EOFinalStack[] foundationA;// FoundationA Stacks
+	private static EOFinalStack[] foundationB;// FoundationB Stacks
+	private static EOWasteStack waste;// waste card spot
 
 	// GUI COMPONENTS (top level)
 	private static final JFrame frame = new JFrame("Even and Odd Solitaire");
@@ -114,15 +114,15 @@ public class EOSolitaire
 			}
 		}
 		// initialize & place final (foundation) decks/stacks
-		foundationA = new FinalStack[NUM_FINAL_DECKS];
-		foundationB = new FinalStack[NUM_FINAL_DECKS];
+		foundationA = new EOFinalStack[NUM_FINAL_DECKS];
+		foundationB = new EOFinalStack[NUM_FINAL_DECKS];
 		for (int x = 0; x < NUM_FINAL_DECKS; x++)
 		{
-			foundationA[x] = new FinalStack();
+			foundationA[x] = new EOFinalStack();
 			foundationA[x].setXY((FINAL_POS.x + (x * EOCard.CARD_WIDTH)) + 10, FINAL_POS.y);
 			table.add(foundationA[x]);
 
-			foundationB[x] = new FinalStack();
+			foundationB[x] = new EOFinalStack();
 			foundationB[x].setXY((FINAL_POS.x + ((x+4) * EOCard.CARD_WIDTH)) + 40, FINAL_POS.y);
 			table.add(foundationB[x]);
 
@@ -144,7 +144,7 @@ public class EOSolitaire
 			tableau[x].setXY((DECK_POS.x + ((x+3) * (EOCard.CARD_WIDTH + 10))), PLAY_POS.y);
 			table.add(tableau[x]);
 		}
-		waste = new WasteStack();
+		waste = new EOWasteStack();
 		waste.setXY(SHOW_POS.x, SHOW_POS.y);
 		table.add(waste);
 

@@ -9,7 +9,7 @@ import javax.swing.JComponent;
  * data structure. This structure is a mixture
  * of a queue and a stack
  */
-class WasteStack extends JComponent
+class EOWasteStack extends JComponent
 {
 	public Vector<EOCard> v;
 	protected int SPREAD = 18;
@@ -17,7 +17,7 @@ class WasteStack extends JComponent
 	protected int _x = 0;
 	protected int _y = 0;
 
-	public WasteStack()
+	public EOWasteStack()
 	{
 		this.setLayout(null);
 		v = new Vector<EOCard>();
@@ -90,7 +90,7 @@ class WasteStack extends JComponent
 	}
 
 	// reverse the order of the stack
-	public WasteStack reverse()
+	public EOWasteStack reverse()
 	{
 		Vector<EOCard> v = new Vector<EOCard>();
 		while (!this.empty())

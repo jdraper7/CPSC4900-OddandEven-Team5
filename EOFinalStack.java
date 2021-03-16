@@ -9,9 +9,9 @@ import java.awt.geom.RoundRectangle2D;
  * Adapts the CardStack to be used as the final
  * (foundation) stack
  */
-class FinalStack extends EOCardStack
+class EOFinalStack extends EOCardStack
 {
-	public FinalStack()
+	public EOFinalStack()
 	{
 		super(false);
 	}
