@@ -1,6 +1,8 @@
-This is a conversion of Klondike solitaire using the ruleset of Even and Odd.
+Even and Odd Solitaire in Java
 
-Credit to Original Source: https://github.com/ShamariFeaster/MySolitaire.git
+This is a conversion of pre-existing Klondike solitaire that uses the ruleset of Even and Odd solitaire.
+
+Credit to Original Source Code: https://github.com/ShamariFeaster/MySolitaire.git
 
 From Original Source:
 "My version of Klondike is an application. It allows the user to cycle through 
