@@ -10,7 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
@@ -19,12 +18,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class EOSolitaire
 {
 	// CONSTANTS
-	public static final int TABLE_HEIGHT = EOCard.CARD_HEIGHT * 4+150;
-	public static final int TABLE_WIDTH = (EOCard.CARD_WIDTH * 12) + 140;
 	public static final int NUM_FINAL_DECKS = 4;
 	public static final int NUM_TABLEAU_DECKS = 9;
 	public static final int NUM_RESERVE_DECKS = 3;
@@ -32,6 +31,9 @@ public class EOSolitaire
 	public static final Point SHOW_POS = new Point(DECK_POS.x + EOCard.CARD_WIDTH + 5, DECK_POS.y);
 	public static final Point FINAL_POS = new Point(SHOW_POS.x + EOCard.CARD_WIDTH + 265, DECK_POS.y);
 	public static final Point PLAY_POS = new Point(DECK_POS.x, FINAL_POS.y + EOCard.CARD_HEIGHT + 255);
+	private static int TABLE_WIDTH;
+	private static int TABLE_HEIGHT;
+
 
 	// GAMEPLAY STRUCTURES
 	private static EOCardStack deck; // populated with standard 52 card deck
@@ -43,9 +45,11 @@ public class EOSolitaire
 
 	// GUI COMPONENTS (top level)
 	private static final JFrame frame = new JFrame("Even and Odd Solitaire");
+	private static JFrame gpFrame;
 	protected static final JPanel table = new JPanel();
 	// other components
 	private static JButton showRulesButton = new JButton("Show Rules");
+	private static JButton menuReturnButton = new JButton("Return to Menu");
 	private static JButton newGameButton = new JButton("New Game");
 	private static JTextField scoreBox = new JTextField();// displays the score
 	private static JTextField timeBox = new JTextField();// displays the time
@@ -53,8 +57,12 @@ public class EOSolitaire
 	private static JTextField statusBox = new JTextField();// status messages
 	private static final EOCard newCardButton = new EOCard();// reveal waste card
 	private static NewGameListener ngl = new NewGameListener();
+	private static MenuReturnListener mrl = new MenuReturnListener();
 	private static ToggleTimerListener ttl = new ToggleTimerListener();
 	private static ShowRulesListener srl = new ShowRulesListener();
+	private static CardMovementManager cmm = new CardMovementManager();
+
+	GamePlatform gamePlatform;
 
 	// TIMER UTILITIES
 	private static Timer timer;
@@ -65,31 +73,31 @@ public class EOSolitaire
 	private static int score = 0;// keep track of the score
 	private static int time = 0;// keep track of seconds elapsed
 
-	public static void main(String[] args)
+	public EOSolitaire(int tw, int th, JFrame gp)
 	{
-
+		gpFrame = gp;
+		gpFrame.setVisible(false);
+		TABLE_WIDTH = tw; TABLE_HEIGHT = th;
 		Container contentPane;
-
 		frame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
-
 		table.setLayout(null);
 		table.setBackground(new Color(0, 180, 0));
-
 		contentPane = frame.getContentPane();
 		contentPane.add(table);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		playNewGame();
-
-		table.addMouseListener(new CardMovementManager());
-		table.addMouseMotionListener(new CardMovementManager());
-
+		table.addMouseListener(cmm);
 		frame.setVisible(true);
-
+		frame.addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent e){
+				GamePlatform.SaveEOScore(time, score, false);
+			}
+		});
 	}
 
 	private static void playNewGame()
 	{
+		score = 0; time = 0;
 		deck = new EOCardStack(true); // deal 52 cards
 		deck.shuffle();
 		table.removeAll();
@@ -170,6 +178,9 @@ public class EOSolitaire
 		newGameButton.addActionListener(ngl);
 		newGameButton.setBounds(0, TABLE_HEIGHT - 70, 120, 30);
 
+		menuReturnButton.addActionListener(mrl);
+		menuReturnButton.setBounds(785, TABLE_HEIGHT - 70, 120, 30);
+
 		showRulesButton.addActionListener(srl);
 		showRulesButton.setBounds(120, TABLE_HEIGHT - 70, 120, 30);
 
@@ -198,6 +209,7 @@ public class EOSolitaire
 		table.add(newGameButton);
 		table.add(showRulesButton);
 		table.add(scoreBox);
+		table.add(menuReturnButton);
 		table.repaint();
 	}
 
@@ -269,11 +281,25 @@ public class EOSolitaire
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			GamePlatform.SaveEOScore(time, score, false);
 			newGameButton.removeActionListener(ngl);
 			showRulesButton.removeActionListener(srl);
 			toggleTimerButton.removeActionListener(ttl);
 			timer.cancel();
 			playNewGame();
+		}
+	}
+
+	private static class MenuReturnListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			GamePlatform.SaveEOScore(time, score, false);
+			table.removeMouseListener(cmm);
+			frame.setVisible(false);
+			frame.dispose();
+			gpFrame.setVisible(true);
 		}
 	}
 
@@ -640,8 +666,11 @@ public class EOSolitaire
 
 			if (checkForWin && gameOver)
 			{
+				scoreClock.cancel();
+				timeRunning = false;
 				JOptionPane.showMessageDialog(table, "Congratulations! You've Won!");
 				statusBox.setText("Game Over!");
+				GamePlatform.SaveEOScore(time, score, true);
 			}
 
 			if (waste.empty() && !deck.empty()) 
