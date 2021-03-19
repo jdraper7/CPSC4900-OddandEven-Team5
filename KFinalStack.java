@@ -11,6 +11,8 @@ import java.awt.geom.RoundRectangle2D;
  */
 class KFinalStack extends KCardStack
 {
+	private static final long serialVersionUID = 1L;
+
 	public KFinalStack()
 	{
 		super(false);

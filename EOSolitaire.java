@@ -30,7 +30,7 @@ public class EOSolitaire
 	public static final Point DECK_POS = new Point(5, 5);
 	public static final Point SHOW_POS = new Point(DECK_POS.x + EOCard.CARD_WIDTH + 5, DECK_POS.y);
 	public static final Point FINAL_POS = new Point(SHOW_POS.x + EOCard.CARD_WIDTH + 265, DECK_POS.y);
-	public static final Point PLAY_POS = new Point(DECK_POS.x, FINAL_POS.y + EOCard.CARD_HEIGHT + 255);
+	public static final Point PLAY_POS = new Point(DECK_POS.x, FINAL_POS.y + EOCard.CARD_HEIGHT + 260);
 	private static int TABLE_WIDTH;
 	private static int TABLE_HEIGHT;
 
@@ -61,8 +61,7 @@ public class EOSolitaire
 	private static ToggleTimerListener ttl = new ToggleTimerListener();
 	private static ShowRulesListener srl = new ShowRulesListener();
 	private static CardMovementManager cmm = new CardMovementManager();
-
-	GamePlatform gamePlatform;
+	private static boolean win = false;
 
 	// TIMER UTILITIES
 	private static Timer timer;
@@ -90,14 +89,14 @@ public class EOSolitaire
 		frame.setVisible(true);
 		frame.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
-				GamePlatform.SaveEOScore(time, score, false);
+				GamePlatform.SaveEOScore(time, score, win);
 			}
 		});
 	}
 
 	private static void playNewGame()
 	{
-		score = 0; time = 0;
+		score = 0; time = 0; win = false;
 		deck = new EOCardStack(true); // deal 52 cards
 		deck.shuffle();
 		table.removeAll();
@@ -281,10 +280,11 @@ public class EOSolitaire
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			GamePlatform.SaveEOScore(time, score, false);
+			GamePlatform.SaveEOScore(time, score, win);
 			newGameButton.removeActionListener(ngl);
 			showRulesButton.removeActionListener(srl);
 			toggleTimerButton.removeActionListener(ttl);
+			menuReturnButton.removeActionListener(mrl);
 			timer.cancel();
 			playNewGame();
 		}
@@ -295,7 +295,11 @@ public class EOSolitaire
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			GamePlatform.SaveEOScore(time, score, false);
+			GamePlatform.SaveEOScore(time, score, win);
+			newGameButton.removeActionListener(ngl);
+			showRulesButton.removeActionListener(srl);
+			toggleTimerButton.removeActionListener(ttl);
+			menuReturnButton.removeActionListener(mrl);
 			table.removeMouseListener(cmm);
 			frame.setVisible(false);
 			frame.dispose();
@@ -311,23 +315,20 @@ public class EOSolitaire
 			JDialog ruleFrame = new JDialog(frame, true);
 			ruleFrame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			ruleFrame.setSize(800, 600);
-			JScrollPane scroll;
 			JEditorPane rulesTextPane = new JEditorPane("text/html", "");
 			rulesTextPane.setEditable(false);
-			String rulesText = "<b>Even and Odd Solitaire - Rules</b>"
-					+ "<br><br><b>Cards in play:</b> 1 deck (52 cards)."
-					+ "<br><br><b>Difficulty:</b> EASY"
+			String rulesText = "<b>Even and Odd Solitaire Rules</b>"
+					+ "<br><br> 1 deck. Easy. No redeal."
 					+ "<br><br><b>Even and Odd Solitaire </b>uses one deck (52 cards). You have 9 tableau piles with one card in each pile and 3 reserve piles (with 6 cards in each pile). You also have 8 foundation piles."
-					+ "<br><br><b>Objective</b>"
-					+ "<br><ul><li>Build up the left four foundations in ascending sequence regardless of suit by twos starting with Ace (Ace,3,5,7,9,J,K) and</li>"
-					+ "<li>Build up the right four foundations in ascending sequence regardless of suit by twos starting with 2 (2,4,6,8,10,Q)</li></ul>"
-					+ "<b>Rules</b>"
+					+ "<br><br><b>The object of the game</b>"
+					+ "<br><ul><li>To build up the left four foundations in ascending sequence regardless of suit by twos starting with Ace (Ace,3,5,7,9,J,K) and</li>"
+					+ "<li>To build up the right four foundations in ascending sequence regardless of suit by twos starting with 2 (2,4,6,8,10,Q)</li></ul>"
+					+ "<b>The rules</b>"
 					+ "<br>Each tableau pile may contain only one card. All cards in tableaus, top cards of reserve, stock and waste piles are available to play. Spaces in tableaus are filled from waste or stock piles. Empty reserve piles cannot be filled."
 					+ "<br><br>When you have made all the moves initially available, begin turning over cards from the stock pile."
 					+ "<br><br>There is no redeal.";
 			rulesTextPane.setText(rulesText);
-			ruleFrame.add(scroll = new JScrollPane(rulesTextPane));
-
+			ruleFrame.add(new JScrollPane(rulesTextPane));
 			ruleFrame.setVisible(true);
 		}
 	}
@@ -670,7 +671,7 @@ public class EOSolitaire
 				timeRunning = false;
 				JOptionPane.showMessageDialog(table, "Congratulations! You've Won!");
 				statusBox.setText("Game Over!");
-				GamePlatform.SaveEOScore(time, score, true);
+				win = true;
 			}
 
 			if (waste.empty() && !deck.empty()) 

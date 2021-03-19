@@ -11,6 +11,7 @@ import javax.swing.JComponent;
  */
 class EOWasteStack extends JComponent
 {
+	private static final long serialVersionUID = 1L;
 	public Vector<EOCard> v;
 	protected int SPREAD = 18;
 	protected boolean playStack = false;

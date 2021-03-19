@@ -9,6 +9,8 @@ import javax.swing.JPanel;
 
 class KCard extends JPanel
 {
+	private static final long serialVersionUID = 1L;
+
 	public static enum Value
 	{
 		ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING
@@ -232,7 +234,6 @@ class KCard extends JPanel
 				drawSuit(g2d, "Clubs", Color.BLACK);
 				break;
 			}
-			int new_x_offset = x_offset + (CARD_WIDTH - 30);
 			switch (_value)
 			{
 			case ACE:

@@ -12,6 +12,7 @@ import javax.swing.JComponent;
  */
 class KCardStack extends JComponent
 {
+	private static final long serialVersionUID = 1L;
 	protected final int NUM_CARDS = 52;
 	protected Vector<KCard> v;
 	protected boolean playStack = false;
@@ -21,7 +22,6 @@ class KCardStack extends JComponent
 
 	public KCardStack(boolean isDeck)
 	{
-		int f = 1;
 		this.setLayout(null);
 		v = new Vector<KCard>();
 		if (isDeck)
