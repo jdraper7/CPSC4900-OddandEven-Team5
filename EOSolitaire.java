@@ -317,13 +317,14 @@ public class EOSolitaire
 			ruleFrame.setSize(800, 600);
 			JEditorPane rulesTextPane = new JEditorPane("text/html", "");
 			rulesTextPane.setEditable(false);
-			String rulesText = "<b>Even and Odd Solitaire Rules</b>"
-					+ "<br><br> 1 deck. Easy. No redeal."
+			String rulesText = "<b>Even and Odd Solitaire - Rules</b>"
+					+ "<br><br><b>Cards in play:</b> 1 deck (52 cards)."
+					+ "<br><br><b>Difficulty:</b> EASY"
 					+ "<br><br><b>Even and Odd Solitaire </b>uses one deck (52 cards). You have 9 tableau piles with one card in each pile and 3 reserve piles (with 6 cards in each pile). You also have 8 foundation piles."
-					+ "<br><br><b>The object of the game</b>"
-					+ "<br><ul><li>To build up the left four foundations in ascending sequence regardless of suit by twos starting with Ace (Ace,3,5,7,9,J,K) and</li>"
-					+ "<li>To build up the right four foundations in ascending sequence regardless of suit by twos starting with 2 (2,4,6,8,10,Q)</li></ul>"
-					+ "<b>The rules</b>"
+					+ "<br><br><b>Objective</b>"
+					+ "<br><ul><li>Build up the left four foundations in ascending sequence regardless of suit by twos starting with Ace (Ace,3,5,7,9,J,K) and</li>"
+					+ "<li>Build up the right four foundations in ascending sequence regardless of suit by twos starting with 2 (2,4,6,8,10,Q)</li></ul>"
+					+ "<b>Rules</b>"
 					+ "<br>Each tableau pile may contain only one card. All cards in tableaus, top cards of reserve, stock and waste piles are available to play. Spaces in tableaus are filled from waste or stock piles. Empty reserve piles cannot be filled."
 					+ "<br><br>When you have made all the moves initially available, begin turning over cards from the stock pile."
 					+ "<br><br>There is no redeal.";
