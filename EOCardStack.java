@@ -12,6 +12,7 @@ import javax.swing.JComponent;
  */
 class EOCardStack extends JComponent
 {
+	private static final long serialVersionUID = 1L;
 	protected final int NUM_CARDS = 52;
 	protected Vector<EOCard> v;
 	protected boolean playStack = false;
@@ -21,7 +22,6 @@ class EOCardStack extends JComponent
 
 	public EOCardStack(boolean isDeck)
 	{
-		int f = 1;
 		this.setLayout(null);
 		v = new Vector<EOCard>();
 		if (isDeck)

@@ -10,7 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
@@ -19,12 +18,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class KSolitaire
 {
 	// CONSTANTS
-	public static final int TABLE_HEIGHT = KCard.CARD_HEIGHT * 4;
-	public static final int TABLE_WIDTH = (KCard.CARD_WIDTH * 7) + 100;
+	public static int TABLE_HEIGHT;
+	public static int TABLE_WIDTH;
 	public static final int NUM_FINAL_DECKS = 4;
 	public static final int NUM_PLAY_DECKS = 7;
 	public static final Point DECK_POS = new Point(5, 5);
@@ -41,18 +42,26 @@ public class KSolitaire
 	// GUI COMPONENTS (top level)
 	private static final JFrame frame = new JFrame("Klondike Solitaire");
 	protected static final JPanel table = new JPanel();
+	private static JFrame gpFrame;
 	// other components
 	private static JEditorPane gameTitle = new JEditorPane("text/html", "");
 	private static JButton showRulesButton = new JButton("Show Rules");
+	private static JButton menuReturnButton = new JButton("Return to Menu");
 	private static JButton newGameButton = new JButton("New Game");
 	private static JButton toggleTimerButton = new JButton("Pause Timer");
 	private static JTextField scoreBox = new JTextField();// displays the score
 	private static JTextField timeBox = new JTextField();// displays the time
 	private static JTextField statusBox = new JTextField();// status messages
 	private static final KCard newCardButton = new KCard();// reveal waste card
+	private static MenuReturnListener mrl = new MenuReturnListener();
+	private static ShowRulesListener srl = new ShowRulesListener();
+	private static CardMovementManager cmm = new CardMovementManager();
+	private static NewGameListener ngl = new NewGameListener();
+	private static ToggleTimerListener ttl = new ToggleTimerListener();
+	private static boolean win = false;
 
 	// TIMER UTILITIES
-	private static Timer timer = new Timer();
+	private static Timer timer;
 	private static ScoreClock scoreClock = new ScoreClock();
 
 	// MISC TRACKING VARIABLES
@@ -95,6 +104,7 @@ public class KSolitaire
 	{
 		scoreClock = new ScoreClock();
 		// set the timer to update every second
+		timer = new Timer();
 		timer.scheduleAtFixedRate(scoreClock, 1000, 1000);
 		timeRunning = true;
 	}
@@ -127,9 +137,32 @@ public class KSolitaire
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			GamePlatform.SaveKScore(time, score, win);
+			newGameButton.removeActionListener(ngl);
+			showRulesButton.removeActionListener(srl);
+			toggleTimerButton.removeActionListener(ttl);
+			menuReturnButton.removeActionListener(mrl);
+			timer.cancel();
 			playNewGame();
 		}
 
+	}
+
+	private static class MenuReturnListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			GamePlatform.SaveKScore(time, score, false);
+			newGameButton.removeActionListener(ngl);
+			showRulesButton.removeActionListener(srl);
+			toggleTimerButton.removeActionListener(ttl);
+			menuReturnButton.removeActionListener(mrl);
+			table.removeMouseListener(cmm);
+			frame.setVisible(false);
+			frame.dispose();
+			gpFrame.setVisible(true);
+		}
 	}
 
 	private static class ToggleTimerListener implements ActionListener
@@ -157,7 +190,6 @@ public class KSolitaire
 			JDialog ruleFrame = new JDialog(frame, true);
 			ruleFrame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			ruleFrame.setSize(TABLE_HEIGHT, TABLE_WIDTH);
-			JScrollPane scroll;
 			JEditorPane rulesTextPane = new JEditorPane("text/html", "");
 			rulesTextPane.setEditable(false);
 			String rulesText = "<b>Klondike Solitaire Rules</b>"
@@ -187,7 +219,7 @@ public class KSolitaire
 					+ "the game begins, but it may be paused by pressing the pause button at the bottom of"
 					+ "the screen. ";
 			rulesTextPane.setText(rulesText);
-			ruleFrame.add(scroll = new JScrollPane(rulesTextPane));
+			ruleFrame.add(new JScrollPane(rulesTextPane));
 
 			ruleFrame.setVisible(true);
 		}
@@ -653,6 +685,7 @@ public class KSolitaire
 			{
 				JOptionPane.showMessageDialog(table, "Congratulations! You've Won!");
 				statusBox.setText("Game Over!");
+				win = true;
 			}
 			// RESET VARIABLES FOR NEXT EVENT
 			start = null;
@@ -668,6 +701,7 @@ public class KSolitaire
 
 	private static void playNewGame()
 	{
+		win = false;
 		deck = new KCardStack(true); // deal 52 cards
 		deck.shuffle();
 		table.removeAll();
@@ -708,7 +742,6 @@ public class KSolitaire
 		// Dealing new game
 		for (int x = 0; x < NUM_PLAY_DECKS; x++)
 		{
-			int hld = 0;
 			KCard c = deck.pop().setFaceup();
 			playCardStack[x].putFirst(c);
 
@@ -718,12 +751,15 @@ public class KSolitaire
 			}
 		}
 		// reset time
-		time = 0;
+		time = 0; score = 0;
 
-		newGameButton.addActionListener(new NewGameListener());
+		newGameButton.addActionListener(ngl);
 		newGameButton.setBounds(0, TABLE_HEIGHT - 70, 120, 30);
 
-		showRulesButton.addActionListener(new ShowRulesListener());
+		menuReturnButton.addActionListener(mrl);
+		menuReturnButton.setBounds(785, TABLE_HEIGHT - 70, 120, 30);
+
+		showRulesButton.addActionListener(srl);
 		showRulesButton.setBounds(120, TABLE_HEIGHT - 70, 120, 30);
 
 		gameTitle.setText("<b>Shamari's Solitaire</b> <br> COP3252 <br> Spring 2012");
@@ -744,7 +780,7 @@ public class KSolitaire
 		startTimer();
 
 		toggleTimerButton.setBounds(480, TABLE_HEIGHT - 70, 125, 30);
-		toggleTimerButton.addActionListener(new ToggleTimerListener());
+		toggleTimerButton.addActionListener(ttl);
 
 		statusBox.setBounds(605, TABLE_HEIGHT - 70, 180, 30);
 		statusBox.setEditable(false);
@@ -757,29 +793,30 @@ public class KSolitaire
 		table.add(newGameButton);
 		table.add(showRulesButton);
 		table.add(scoreBox);
+		table.add(menuReturnButton);
 		table.repaint();
 	}
 
-	public static void main(String[] args)
+	public KSolitaire(int tw, int th, JFrame gp)
 	{
-
+		gpFrame = gp;
+		gpFrame.setVisible(false);
+		TABLE_WIDTH = tw; TABLE_HEIGHT = th;
 		Container contentPane;
-
 		frame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
-
 		table.setLayout(null);
 		table.setBackground(new Color(0, 180, 0));
-
 		contentPane = frame.getContentPane();
 		contentPane.add(table);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		playNewGame();
-
-		table.addMouseListener(new CardMovementManager());
-		table.addMouseMotionListener(new CardMovementManager());
-
+		table.addMouseListener(cmm);
+		table.addMouseMotionListener(cmm);
 		frame.setVisible(true);
-
+		frame.addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent e){
+				GamePlatform.SaveKScore(time, score, win);
+			}
+		});
 	}
 }

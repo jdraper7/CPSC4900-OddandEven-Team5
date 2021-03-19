@@ -12,18 +12,13 @@ import java.awt.Dimension;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.io.File;
 import java.util.Scanner;
 import java.util.Date;
 
 public class GamePlatform 
 {
-    // This will be the main menu of the entire game library.
-    
-    // It is likely possible to create this using the same logic that generates the GUI in the two solitaire.java games and the logic that creates the buttoms at the 
-    // bottom of each game session.
-
-    //*** Maybe use a global variable to track wins, losses, and scores.
 
     //Main GUI
     protected static final JFrame gpFrame = new JFrame("Card Game Platform - Team 5");
@@ -49,9 +44,14 @@ public class GamePlatform
     private static final int TABLE_HEIGHT = EOCard.CARD_HEIGHT * 4+150;
 	private static final int TABLE_WIDTH = (EOCard.CARD_WIDTH * 12) + 140;
 
-    private static Object[][] eoStats;
-    private static final String[] columnNames = { "Win/Loss", "Score", "Game Time", "Date" }; 
-    private static ArrayList<String[]> runningStats = new ArrayList<>();
+    private static Object[][] stats;
+    private static final String[] columnNames = { "Win/Loss", "Score", "Game Time in Seconds", "Date" }; 
+    private static ArrayList<String[]> runningEOStats = new ArrayList<>();
+    private static ArrayList<String[]> runningKStats = new ArrayList<>();
+    private static ArrayList<String[]> runningEWStats = new ArrayList<>();
+    private static ArrayList<String[]> runningEStats = new ArrayList<>();
+    private static ArrayList<String[]> runningEOffStats = new ArrayList<>();
+    private static ArrayList<String[]> runningExStats = new ArrayList<>();
 
     public static void main(String[] args)
 	{
@@ -111,56 +111,115 @@ public class GamePlatform
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+            if (panel.getComponents().length > 1) {panel.remove(1);}
+            int i=0;
             JButton b = (JButton) e.getSource();
 			switch (b.getText()) {
                 case "Play Even and Odd": new EOSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame);
                 break;
-                case "Play Klondike": 
+                case "Play Klondike": new KSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame);
                 break;
-                case "Play Eagle Wing": 
+                case "Play Eagle Wing": //new EWSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame);
                 break;
-                case "Play Easthaven": 
+                case "Play Easthaven": //new ESolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame);
                 break;
-                case "Play Eight Off": 
+                case "Play Eight Off": //new EOffSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame);
                 break;
-                case "Play Exit": 
+                case "Play Exit": //new ExSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame);
                 break;
-                case "Even and Odd Stats":
-                if (panel.getComponents().length > 1) {
-                    panel.remove(1);
-                    panel.repaint();
-                    panel.revalidate();
-                }
-                else {
-                    int i=0;
-                    eoStats = new Object[runningStats.size()][];
-                    for (String[] str : runningStats) {
-                        eoStats[i++] = str;
-                    } 
-                    j = new JTable(eoStats, columnNames);
+                case "Even and Odd Stats": 
+                    i=0;
+                    stats = new Object[runningEOStats.size()][4];
+                    for (String[] str : runningEOStats) {
+                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);}
+                    j = new JTable(stats, columnNames);
                     sp = new JScrollPane(j);
                     sp.setMaximumSize((new Dimension(TABLE_WIDTH, 0)));
                     panel.add(sp);
-                    panel.repaint();
-                    panel.revalidate();
-                }
                 break;
-                case "Klondike Stats": 
+                case "Klondike Stats":
+                    i=0;
+                    stats = new Object[runningKStats.size()][4];
+                    for (String[] str : runningKStats) {
+                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);} 
+                    j = new JTable(stats, columnNames);
+                    sp = new JScrollPane(j);
+                    sp.setMaximumSize((new Dimension(TABLE_WIDTH, 0)));
+                    panel.add(sp);
                 break;
                 case "Eagle Wing Stats": 
+                    i=0;
+                    stats = new Object[runningEWStats.size()][4];
+                    for (String[] str : runningEWStats) {
+                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);} 
+                    j = new JTable(stats, columnNames);
+                    sp = new JScrollPane(j);
+                    sp.setMaximumSize((new Dimension(TABLE_WIDTH, 0)));
+                    panel.add(sp);
                 break;
-                case "Easthaven Stats": 
+                case "Easthaven Stats":
+                    i=0;
+                    stats = new Object[runningEStats.size()][4];
+                    for (String[] str : runningEStats) {
+                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);} 
+                    j = new JTable(stats, columnNames);
+                    sp = new JScrollPane(j);
+                    sp.setMaximumSize((new Dimension(TABLE_WIDTH, 0)));
+                    panel.add(sp);
                 break;
                 case "Eight Off Stats": 
+                    i=0;
+                    stats = new Object[runningEOffStats.size()][4];
+                    for (String[] str : runningEOffStats) {
+                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);} 
+                    j = new JTable(stats, columnNames);
+                    sp = new JScrollPane(j);
+                    sp.setMaximumSize((new Dimension(TABLE_WIDTH, 0)));
+                    panel.add(sp);
                 break;
                 case "Exit Stats": 
+                    i=0;
+                    stats = new Object[runningExStats.size()][4];
+                    for (String[] str : runningExStats) {
+                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);} 
+                    j = new JTable(stats, columnNames);
+                    sp = new JScrollPane(j);
+                    sp.setMaximumSize((new Dimension(TABLE_WIDTH, 0)));
+                    panel.add(sp);
                 break;
             }
+            panel.repaint();
+            panel.revalidate();
 		}
 	}
 
     public static void SaveEOScore(int time, int score, boolean win) { 
-        runningStats.add(new String[]{win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
+        runningEOStats.add(new String[]{"EO",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
+        write();
+    }
+
+    public static void SaveKScore(int time, int score, boolean win) { 
+        runningKStats.add(new String[]{"K",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
+        write();
+    }
+
+    public static void SaveEWScore(int time, int score, boolean win) { 
+        runningEWStats.add(new String[]{"EW",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
+        write();
+    }
+
+    public static void SaveEScore(int time, int score, boolean win) { 
+        runningEStats.add(new String[]{"E",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
+        write();
+    }
+
+    public static void SaveEOffScore(int time, int score, boolean win) { 
+        runningEOffStats.add(new String[]{"EOff",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
+        write();
+    }
+
+    public static void SaveExScore(int time, int score, boolean win) { 
+        runningExStats.add(new String[]{"Ex",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
         write();
     }
 
@@ -168,8 +227,21 @@ public class GamePlatform
         try {
             Scanner scanner = new Scanner(new File("stats.txt"));
             while (scanner.hasNextLine()) {
-                String[] arr = scanner.nextLine().split(":", 4);
-                runningStats.add(new String[]{arr[0],arr[1],arr[2],arr[3]});
+                String[] arr = scanner.nextLine().split(":", 5);
+                switch (arr[0]) {
+                    case "EO": runningEOStats.add(arr);
+                    break;
+                    case "K": runningKStats.add(arr);
+                    break;
+                    case "EW": runningEWStats.add(arr);
+                    break;
+                    case "E": runningEStats.add(arr);
+                    break;
+                    case "EOff": runningEOffStats.add(arr);
+                    break;
+                    case "Ex": runningExStats.add(arr);
+                    break;
+                }
             }
         }
         catch (Exception e) {
@@ -179,8 +251,28 @@ public class GamePlatform
 
     private static void write() {
         try (BufferedWriter outputWriter = new BufferedWriter(new FileWriter("stats.txt"))) {
-            for (String[] str : runningStats) {
-                outputWriter.write(str[0]+":"+str[1]+":"+str[2]+":"+str[3]);
+            for (String[] str : runningEOStats) {
+                outputWriter.write(String.join(":",str));
+                outputWriter.newLine();
+            }
+            for (String[] str : runningKStats) {
+                outputWriter.write(String.join(":",str));
+                outputWriter.newLine();
+            }
+            for (String[] str : runningEWStats) {
+                outputWriter.write(String.join(":",str));
+                outputWriter.newLine();
+            }
+            for (String[] str : runningEStats) {
+                outputWriter.write(String.join(":",str));
+                outputWriter.newLine();
+            }
+            for (String[] str : runningEOffStats) {
+                outputWriter.write(String.join(":",str));
+                outputWriter.newLine();
+            }
+            for (String[] str : runningExStats) {
+                outputWriter.write(String.join(":",str));
                 outputWriter.newLine();
             }
             outputWriter.flush();

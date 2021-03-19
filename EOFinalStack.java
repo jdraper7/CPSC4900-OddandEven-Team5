@@ -11,6 +11,8 @@ import java.awt.geom.RoundRectangle2D;
  */
 class EOFinalStack extends EOCardStack
 {
+	private static final long serialVersionUID = 1L;
+
 	public EOFinalStack()
 	{
 		super(false);
