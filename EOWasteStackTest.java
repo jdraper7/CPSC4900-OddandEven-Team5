@@ -1,4 +1,3 @@
-package cards;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.Graphics;
