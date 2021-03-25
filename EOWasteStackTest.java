@@ -1,4 +1,3 @@
-package cards;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.Graphics;
@@ -40,7 +39,7 @@ class EOWasteStackTest
 		
 		// expected value should be true as when waste stack is created variable 'v' is empty
 		assertTrue(wasteStackTest.empty());
-		
+
 		// add some cards into wasteStack
 		EOCard cardTest = new EOCard();
 		EOCard cardTest2 = new EOCard();
