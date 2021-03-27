@@ -1,7 +1,9 @@
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class KFinalStackTest {
+class KFinalStackTest 
+{
     @Test
     void setXY() {
         KFinalStack fs = new KFinalStack();
