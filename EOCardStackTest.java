@@ -1,8 +1,5 @@
 import org.junit.jupiter.api.Test;
-
-import java.awt.Graphics;
 import java.awt.Point;
-import java.lang.reflect.Array;
 
 import static org.junit.jupiter.api.Assertions.*;
 
