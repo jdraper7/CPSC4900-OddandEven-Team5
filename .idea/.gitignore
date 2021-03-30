@@ -1,3 +1,8 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+/misc.xml
+/modules.xml
+/vcs.xml
+../out
+../CPSC4900-OddandEven2.iml
