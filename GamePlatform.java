@@ -15,7 +15,7 @@ public class GamePlatform
 
     //Main GUI
     protected static final JFrame gpFrame = new JFrame("Card Game Platform - Team 5");
-//    protected static final JPanel table = new JPanel();
+    protected static final ImagePanel table = new ImagePanel( new ImageIcon("assets/images/background_platform.jpg").getImage());
     protected static final JPanel panel = new JPanel();
     protected static JTable j;
     protected static JScrollPane sp;
@@ -48,9 +48,7 @@ public class GamePlatform
 
     public static void main(String[] args)
 	{
-        ImagePanel table = new ImagePanel(
-                new ImageIcon("assets/images/background_platform.jpg").getImage());
-
+	    read();
         JFrame frame = new JFrame();
         frame.getContentPane().add(panel);
         frame.pack();
