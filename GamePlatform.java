@@ -35,7 +35,7 @@ public class GamePlatform
     private static JButton ex_GameButton = new JButton("Play Exit");
 
     private static final int TABLE_HEIGHT = EOCard.CARD_HEIGHT * 4+150;
-	private static final int TABLE_WIDTH = (EOCard.CARD_WIDTH * 12) + 140;
+    private static final int TABLE_WIDTH = (EOCard.CARD_WIDTH * 12) + 140;
 
     private static Object[][] stats;
     private static final String[] columnNames = { "Win/Loss", "Score", "Game Time in Seconds", "Date" }; 
@@ -48,7 +48,7 @@ public class GamePlatform
 
     public static void main(String[] args)
 	{
-	    read();
+	read();
         JFrame frame = new JFrame();
         frame.getContentPane().add(panel);
         frame.pack();
