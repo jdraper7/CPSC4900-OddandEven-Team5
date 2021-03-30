@@ -49,7 +49,7 @@ public class GamePlatform
     public static void main(String[] args)
 	{
         ImagePanel table = new ImagePanel(
-                new ImageIcon("assets/images/background.jpg").getImage());
+                new ImageIcon("assets/images/background_platform.jpg").getImage());
 
         JFrame frame = new JFrame();
         frame.getContentPane().add(panel);
@@ -108,6 +108,7 @@ public class GamePlatform
 
 
 	}
+
     static class ImagePanel extends JPanel {
 
         private Image img;
