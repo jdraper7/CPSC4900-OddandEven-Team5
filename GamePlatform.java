@@ -1,14 +1,7 @@
-import java.awt.Color;
-import java.awt.Container;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
-import javax.swing.BoxLayout;
-import java.awt.Dimension;
+import javax.swing.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -22,7 +15,7 @@ public class GamePlatform
 
     //Main GUI
     protected static final JFrame gpFrame = new JFrame("Card Game Platform - Team 5");
-    protected static final JPanel table = new JPanel();
+//    protected static final JPanel table = new JPanel();
     protected static final JPanel panel = new JPanel();
     protected static JTable j;
     protected static JScrollPane sp;
@@ -55,7 +48,15 @@ public class GamePlatform
 
     public static void main(String[] args)
 	{
-        read();
+        ImagePanel table = new ImagePanel(
+                new ImageIcon("assets/images/background.jpg").getImage());
+
+        JFrame frame = new JFrame();
+        frame.getContentPane().add(panel);
+        frame.pack();
+        frame.setVisible(true);
+
+
 		Container contentPane;
 		gpFrame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -104,7 +105,31 @@ public class GamePlatform
         table.add(eoffStatsButton);
         table.add(exStatsButton);
         table.repaint();
+
+
 	}
+    static class ImagePanel extends JPanel {
+
+        private Image img;
+
+        public ImagePanel(String img) {
+            this(new ImageIcon(img).getImage());
+        }
+
+        public ImagePanel(Image img) {
+            this.img = img;
+            Dimension size = new Dimension(TABLE_WIDTH, TABLE_HEIGHT);
+            setPreferredSize(size);
+            setMinimumSize(size);
+            setMaximumSize(size);
+            setSize(size);
+            setLayout(null);
+        }
+
+        public void paintComponent(Graphics g) {
+            g.drawImage(img, 0, 0, null);
+        }
+    }
 
     private static class ButtonListener implements ActionListener
 	{
