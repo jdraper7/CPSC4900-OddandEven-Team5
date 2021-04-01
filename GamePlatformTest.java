@@ -59,4 +59,20 @@ class GamePlatformTest
         runningExStats.add(new String[]{});
         assertEquals(1,1);
     }
+
+    @Test
+    void readTest()
+    {
+        ArrayList<String[]> runningStats = new ArrayList<>();
+        runningStats.add(new String[]{});
+        assertFalse(runningStats.isEmpty());
+    }
+
+    @Test
+    void writeTest()
+    {
+        ArrayList<String[]> runningStats = new ArrayList<>();
+        runningStats.add(new String[]{"a","b"});
+        assertEquals(String.join(":", runningStats.get(0)),"a:b");
+    }
 }
