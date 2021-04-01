@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.io.File;
 import java.util.Scanner;
 import java.util.Date;
+import java.util.Random;
 
 public class GamePlatform 
 {
@@ -53,6 +54,11 @@ public class GamePlatform
     private static ArrayList<String[]> runningEOffStats = new ArrayList<>();
     private static ArrayList<String[]> runningExStats = new ArrayList<>();
 
+    private static int r1 = new Random().nextInt(255);
+    private static int r2 = new Random().nextInt(255);
+    private static int r3 = new Random().nextInt(255);
+    private static Color color = new Color(r1, r2, r3);
+
     public static void main(String[] args)
 	{
         read();
@@ -60,7 +66,7 @@ public class GamePlatform
 		gpFrame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		table.setLayout(null);
-		table.setBackground(new Color(0, 180, 0));
+		table.setBackground(color);
         panel.add(table);
 		contentPane = gpFrame.getContentPane();
 		contentPane.add(panel);
@@ -115,7 +121,7 @@ public class GamePlatform
             int i=0;
             JButton b = (JButton) e.getSource();
 			switch (b.getText()) {
-                case "Play Even and Odd": new EOSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame);
+                case "Play Even and Odd": int avg = (r1+r2+r3)/3; new EOSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame, color, avg>(255/2));
                 break;
                 case "Play Klondike": new KSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame);
                 break;

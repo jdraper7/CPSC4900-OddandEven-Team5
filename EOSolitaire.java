@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.Font;
 
 public class EOSolitaire
 {
@@ -62,6 +63,7 @@ public class EOSolitaire
 	private static ShowRulesListener srl = new ShowRulesListener();
 	private static CardMovementManager cmm = new CardMovementManager();
 	private static boolean win = false;
+	private static boolean fc;
 
 	// TIMER UTILITIES
 	private static Timer timer;
@@ -72,15 +74,16 @@ public class EOSolitaire
 	private static int score = 0;// keep track of the score
 	private static int time = 0;// keep track of seconds elapsed
 
-	public EOSolitaire(int tw, int th, JFrame gp)
+	public EOSolitaire(int tw, int th, JFrame gp, Color color, boolean fontColor)
 	{
 		gpFrame = gp;
+		fc = fontColor;
 		gpFrame.setVisible(false);
 		TABLE_WIDTH = tw; TABLE_HEIGHT = th;
 		Container contentPane;
 		frame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
 		table.setLayout(null);
-		table.setBackground(new Color(0, 180, 0));
+		table.setBackground(color);
 		contentPane = frame.getContentPane();
 		contentPane.add(table);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -184,11 +187,13 @@ public class EOSolitaire
 		showRulesButton.setBounds(120, TABLE_HEIGHT - 70, 120, 30);
 
 		scoreBox.setBounds(240, TABLE_HEIGHT - 70, 120, 30);
+		scoreBox.setForeground(fc?Color.black:Color.white);
 		scoreBox.setText("Score: 0");
 		scoreBox.setEditable(false);
 		scoreBox.setOpaque(false);
 
 		timeBox.setBounds(360, TABLE_HEIGHT - 70, 120, 30);
+		timeBox.setForeground(fc?Color.black:Color.white);
 		timeBox.setText("Seconds: 0");
 		timeBox.setEditable(false);
 		timeBox.setOpaque(false);
