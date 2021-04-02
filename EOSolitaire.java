@@ -20,7 +20,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.Font;
 
 public class EOSolitaire
 {
@@ -32,7 +31,6 @@ public class EOSolitaire
 	public static final Point SHOW_POS = new Point(DECK_POS.x + EOCard.CARD_WIDTH + 5, DECK_POS.y);
 	public static final Point FINAL_POS = new Point(SHOW_POS.x + EOCard.CARD_WIDTH + 265, DECK_POS.y);
 	public static final Point PLAY_POS = new Point(DECK_POS.x, FINAL_POS.y + EOCard.CARD_HEIGHT + 260);
-
 	private static int TABLE_WIDTH;
 	private static int TABLE_HEIGHT;
 
@@ -71,9 +69,9 @@ public class EOSolitaire
 	private static ScoreClock scoreClock = new ScoreClock();
 
 	// MISC TRACKING VARIABLES
-	public static boolean timeRunning = false;// timer running?
-	public static int score = 0;// keep track of the score
-	public static int time = 0;// keep track of seconds elapsed
+	private static boolean timeRunning = false;// timer running?
+	private static int score = 0;// keep track of the score
+	private static int time = 0;// keep track of seconds elapsed
 
 	public EOSolitaire(int tw, int th, JFrame gp, Color color, boolean fontColor)
 	{
@@ -90,6 +88,7 @@ public class EOSolitaire
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		playNewGame();
 		table.addMouseListener(cmm);
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
@@ -98,7 +97,7 @@ public class EOSolitaire
 		});
 	}
 
-	static void playNewGame()
+	private static void playNewGame()
 	{
 		score = 0; time = 0; win = false;
 		deck = new EOCardStack(true); // deal 52 cards
