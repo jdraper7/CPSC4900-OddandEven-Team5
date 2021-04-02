@@ -812,6 +812,7 @@ public class KSolitaire
 		playNewGame();
 		table.addMouseListener(cmm);
 		table.addMouseMotionListener(cmm);
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
