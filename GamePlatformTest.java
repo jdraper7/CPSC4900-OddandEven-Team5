@@ -17,7 +17,7 @@ class GamePlatformTest
     {
         ArrayList<String[]> runningEOStats = new ArrayList<>();
         runningEOStats.add(new String[]{});
-        assertEquals(1,1);
+        assertFalse(runningEOStats.isEmpty());
     }
 
     @Test
@@ -25,7 +25,7 @@ class GamePlatformTest
     {
         ArrayList<String[]> runningKStats = new ArrayList<>();
         runningKStats.add(new String[]{});
-        assertEquals(1,1);
+        assertFalse(runningKStats.isEmpty());
     }
 
     @Test
@@ -33,7 +33,7 @@ class GamePlatformTest
     {
         ArrayList<String[]> runningEWStats = new ArrayList<>();
         runningEWStats.add(new String[]{});
-        assertEquals(1,1);
+        assertFalse(runningEWStats.isEmpty());
     }
 
     @Test
@@ -41,7 +41,7 @@ class GamePlatformTest
     {
         ArrayList<String[]> runningEStats = new ArrayList<>();
         runningEStats.add(new String[]{});
-        assertEquals(1,1);
+        assertFalse(runningEStats.isEmpty());
     }
 
     @Test
@@ -49,7 +49,7 @@ class GamePlatformTest
     {
         ArrayList<String[]> runningEOffStats = new ArrayList<>();
         runningEOffStats.add(new String[]{});
-        assertEquals(1,1);
+        assertFalse(runningEOffStats.isEmpty());
     }
 
     @Test
@@ -57,7 +57,7 @@ class GamePlatformTest
     {
         ArrayList<String[]> runningExStats = new ArrayList<>();
         runningExStats.add(new String[]{});
-        assertEquals(1,1);
+        assertFalse(runningExStats.isEmpty());
     }
 
     @Test
