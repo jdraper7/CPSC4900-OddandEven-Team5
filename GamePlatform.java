@@ -1,29 +1,25 @@
-import java.awt.Color;
-import java.awt.Container;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
-import javax.swing.BoxLayout;
-import java.awt.Dimension;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.File;
 import java.util.Scanner;
 import java.util.Date;
-import java.util.Random;
 
-public class GamePlatform 
+public class GamePlatform
 {
-
     //Main GUI
     protected static final JFrame gpFrame = new JFrame("Card Game Platform - Team 5");
-    protected static final JPanel table = new JPanel();
+    protected static final ImagePanel table = new ImagePanel( new ImageIcon("assets/images/backgrounds/platform.jpg").getImage());
     protected static final JPanel panel = new JPanel();
     protected static JTable j;
     protected static JScrollPane sp;
@@ -42,11 +38,11 @@ public class GamePlatform
     private static JButton eoff_GameButton = new JButton("Play Eight Off");
     private static JButton ex_GameButton = new JButton("Play Exit");
 
-    private static final int TABLE_HEIGHT = EOCard.CARD_HEIGHT * 4+150;
-	private static final int TABLE_WIDTH = (EOCard.CARD_WIDTH * 12) + 140;
+    private static int TABLE_HEIGHT = EOCard.CARD_HEIGHT * 4+150;
+    private static int TABLE_WIDTH = (EOCard.CARD_WIDTH * 12) + 140;
 
     private static Object[][] stats;
-    private static final String[] columnNames = { "Win/Loss", "Score", "Game Time in Seconds", "Date" }; 
+    private static final String[] columnNames = { "Win/Loss", "Score", "Game Time in Seconds", "Date" };
     private static ArrayList<String[]> runningEOStats = new ArrayList<>();
     private static ArrayList<String[]> runningKStats = new ArrayList<>();
     private static ArrayList<String[]> runningEWStats = new ArrayList<>();
@@ -54,54 +50,79 @@ public class GamePlatform
     private static ArrayList<String[]> runningEOffStats = new ArrayList<>();
     private static ArrayList<String[]> runningExStats = new ArrayList<>();
 
-    private static int r1 = new Random().nextInt(255);
-    private static int r2 = new Random().nextInt(255);
-    private static int r3 = new Random().nextInt(255);
-    private static Color color = new Color(r1, r2, r3);
+    // varibale for which games are avaliable make it an array
+    // game 1 = true
+    // game 2 = false
+
 
     public static void main(String[] args)
-	{
+    {
         read();
-		Container contentPane;
-		gpFrame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
+        Container contentPane;
+        gpFrame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
+//        gpFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		table.setLayout(null);
-		table.setBackground(color);
+        table.setLayout(null);
+        table.setBackground(new Color(0, 180, 0));
         panel.add(table);
-		contentPane = gpFrame.getContentPane();
-		contentPane.add(panel);
-		gpFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gpFrame.setLocationRelativeTo(null);
-		gpFrame.setVisible(true);
+
+        contentPane = gpFrame.getContentPane();
+        contentPane.add(panel);
+        gpFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gpFrame.setVisible(true);
+
+        Dimension size = gpFrame.getBounds().getSize();
+
+        int width = 200;
+        int width_gap = 20;
+        int height_launcher = 100;
+        int stats_gap = 10;
+        int height_stats = 30;
+        int offset_x = (int) (size.getWidth()/4);
+        int offset_y = (int) (size.getHeight()/5);
+        int offset_y2 = (int) (size.getHeight()/5 + 150);
+        int column_gap = 20;
+
+
+        eo_GameButton.setBounds(offset_x, offset_y, width, height_launcher);
+        eoStatsButton.setBounds(offset_x, offset_y+height_launcher+stats_gap, width, height_stats);
+
+        k_GameButton.setBounds(offset_x+(width+width_gap), offset_y, width, height_launcher);
+        kStatsButton.setBounds(offset_x+(width+width_gap), offset_y+height_launcher+stats_gap, width, height_stats);
+
+        ew_GameButton.setBounds(offset_x+2*(width+width_gap), offset_y, width, height_launcher);
+        ewStatsButton.setBounds(offset_x+2*(width+width_gap), offset_y+height_launcher+stats_gap, width, height_stats);
+
+
+        e_GameButton.setBounds(offset_x, offset_y2+column_gap, width, height_launcher);
+        estatsButton.setBounds(offset_x, offset_y2+height_launcher+stats_gap+column_gap, width, height_stats);
+
+        eoff_GameButton.setBounds(offset_x+(width+width_gap), offset_y2+column_gap, width, height_launcher);
+        eoffStatsButton.setBounds(offset_x+(width+width_gap), offset_y2+height_launcher+stats_gap+column_gap, width, height_stats);
+
+        ex_GameButton.setBounds(offset_x+2*(width+width_gap), offset_y2+column_gap, width, height_launcher);
+        exStatsButton.setBounds(offset_x+2*(width+width_gap), offset_y2+height_launcher+stats_gap+column_gap, width, height_stats);
+
         eo_GameButton.addActionListener(new ButtonListener());
-		eo_GameButton.setBounds(40, 25, 200, 100);
-        k_GameButton.addActionListener(new ButtonListener());
-		k_GameButton.setBounds(250, 25, 200, 100);
-        ew_GameButton.addActionListener(new ButtonListener());
-		ew_GameButton.setBounds(460, 25, 200, 100);
-        e_GameButton.addActionListener(new ButtonListener());
-		e_GameButton.setBounds(670, 25, 200, 100);
-        eoff_GameButton.addActionListener(new ButtonListener());
-		eoff_GameButton.setBounds(880, 25, 200, 100);
-        ex_GameButton.addActionListener(new ButtonListener());
-		ex_GameButton.setBounds(1090, 25, 200, 100);
         eoStatsButton.addActionListener(new ButtonListener());
-		eoStatsButton.setBounds(40, 126, 200, 30);
+        k_GameButton.addActionListener(new ButtonListener());
         kStatsButton.addActionListener(new ButtonListener());
-		kStatsButton.setBounds(250, 126, 200, 30);
+        ew_GameButton.addActionListener(new ButtonListener());
         ewStatsButton.addActionListener(new ButtonListener());
-		ewStatsButton.setBounds(460, 126, 200, 30);
+        e_GameButton.addActionListener(new ButtonListener());
         estatsButton.addActionListener(new ButtonListener());
-		estatsButton.setBounds(670, 126, 200, 30);
+        eoff_GameButton.addActionListener(new ButtonListener());
         eoffStatsButton.addActionListener(new ButtonListener());
-		eoffStatsButton.setBounds(880, 126, 200, 30);
+        ex_GameButton.addActionListener(new ButtonListener());
         exStatsButton.addActionListener(new ButtonListener());
-		exStatsButton.setBounds(1090, 126, 200, 30);
-		table.add(eo_GameButton);
-		table.add(k_GameButton);
-		table.add(ew_GameButton);
-		table.add(e_GameButton);
-		table.add(eoff_GameButton);
+
+        table.add(eo_GameButton);
+        table.add(k_GameButton);
+        table.add(ew_GameButton);
+        table.add(e_GameButton);
+        table.add(eoff_GameButton);
         table.add(ex_GameButton);
         table.add(eoStatsButton);
         table.add(kStatsButton);
@@ -110,31 +131,100 @@ public class GamePlatform
         table.add(estatsButton);
         table.add(eoffStatsButton);
         table.add(exStatsButton);
+        panel.repaint();
         table.repaint();
-	}
+
+
+        gpFrame.getRootPane().addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                // This is only called when the user releases the mouse button.
+                Component c = (Component)e.getSource();
+                int width = 200;
+                int width_gap = 20;
+                int height_launcher = 100;
+                int stats_gap = 10;
+                int height_stats = 30;
+                int offset_x = c.getWidth()/4;
+                int offset_y = c.getHeight()/5;
+                int offset_x2 = c.getWidth()/4;
+                int offset_y2 = c.getHeight()/5 + 150;
+                int column_gap = 20;
+
+
+                eo_GameButton.setBounds(offset_x, offset_y, width, height_launcher);
+                eoStatsButton.setBounds(offset_x, offset_y+height_launcher+stats_gap, width, height_stats);
+
+                k_GameButton.setBounds(offset_x+(width+width_gap), offset_y, width, height_launcher);
+                kStatsButton.setBounds(offset_x+(width+width_gap), offset_y+height_launcher+stats_gap, width, height_stats);
+
+                ew_GameButton.setBounds(offset_x+2*(width+width_gap), offset_y, width, height_launcher);
+                ewStatsButton.setBounds(offset_x+2*(width+width_gap), offset_y+height_launcher+stats_gap, width, height_stats);
+
+
+                e_GameButton.setBounds(offset_x, offset_y2+column_gap, width, height_launcher);
+                estatsButton.setBounds(offset_x, offset_y2+height_launcher+stats_gap+column_gap, width, height_stats);
+
+                eoff_GameButton.setBounds(offset_x+(width+width_gap), offset_y2+column_gap, width, height_launcher);
+                eoffStatsButton.setBounds(offset_x+(width+width_gap), offset_y2+height_launcher+stats_gap+column_gap, width, height_stats);
+
+                ex_GameButton.setBounds(offset_x+2*(width+width_gap), offset_y2+column_gap, width, height_launcher);
+                exStatsButton.setBounds(offset_x+2*(width+width_gap), offset_y2+height_launcher+stats_gap+column_gap, width, height_stats);
+            }
+        });
+
+
+
+    }
+
+
+
+    static class ImagePanel extends JPanel {
+
+        private Image img;
+
+        public ImagePanel(String img) {
+            this(new ImageIcon(img).getImage());
+        }
+
+        public ImagePanel(Image img) {
+            this.img = img;
+            Dimension size = new Dimension(1080, 2200);
+            setPreferredSize(size);
+            setSize(size);
+            setLayout(null);
+        }
+
+        public void paintComponent(Graphics g) {
+//            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//            int width = (int) screenSize.getWidth();
+//            int height = (int) screenSize.getHeight();
+//            this.img.getScaledInstance(width,height,Image.SCALE_SMOOTH);
+            g.drawImage(img, 0, 0, null);
+        }
+    }
 
     private static class ButtonListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
             if (panel.getComponents().length > 1) {panel.remove(1);}
             int i=0;
             JButton b = (JButton) e.getSource();
-			switch (b.getText()) {
-                case "Play Even and Odd": int avg = (r1+r2+r3)/3; new EOSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame, color, avg>(255/2));
-                break;
+            switch (b.getText()) {
+                case "Play Even and Odd": new EOSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame);
+                    break;
                 case "Play Klondike": new KSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame);
-                break;
+                    break;
                 case "Play Eagle Wing": //new EWSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame);
-                break;
+                    break;
                 case "Play Easthaven": //new ESolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame);
-                break;
+                    break;
                 case "Play Eight Off": //new EOffSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame);
-                break;
-                case "Play Exit": //new ExSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame); 
-                break;
-                case "Even and Odd Stats": 
+                    break;
+                case "Play Exit": //new ExSolitaire(TABLE_WIDTH, TABLE_HEIGHT, gpFrame);
+                    break;
+                case "Even and Odd Stats":
                     i=0;
                     stats = new Object[runningEOStats.size()][4];
                     for (String[] str : runningEOStats) {
@@ -143,89 +233,89 @@ public class GamePlatform
                     sp = new JScrollPane(j);
                     sp.setMaximumSize((new Dimension(TABLE_WIDTH, 0)));
                     panel.add(sp);
-                break;
+                    break;
                 case "Klondike Stats":
                     i=0;
                     stats = new Object[runningKStats.size()][4];
                     for (String[] str : runningKStats) {
-                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);} 
+                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);}
                     j = new JTable(stats, columnNames);
                     sp = new JScrollPane(j);
                     sp.setMaximumSize((new Dimension(TABLE_WIDTH, 0)));
                     panel.add(sp);
-                break;
-                case "Eagle Wing Stats": 
+                    break;
+                case "Eagle Wing Stats":
                     i=0;
                     stats = new Object[runningEWStats.size()][4];
                     for (String[] str : runningEWStats) {
-                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);} 
+                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);}
                     j = new JTable(stats, columnNames);
                     sp = new JScrollPane(j);
                     sp.setMaximumSize((new Dimension(TABLE_WIDTH, 0)));
                     panel.add(sp);
-                break;
+                    break;
                 case "Easthaven Stats":
                     i=0;
                     stats = new Object[runningEStats.size()][4];
                     for (String[] str : runningEStats) {
-                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);} 
+                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);}
                     j = new JTable(stats, columnNames);
                     sp = new JScrollPane(j);
                     sp.setMaximumSize((new Dimension(TABLE_WIDTH, 0)));
                     panel.add(sp);
-                break;
-                case "Eight Off Stats": 
+                    break;
+                case "Eight Off Stats":
                     i=0;
                     stats = new Object[runningEOffStats.size()][4];
                     for (String[] str : runningEOffStats) {
-                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);} 
+                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);}
                     j = new JTable(stats, columnNames);
                     sp = new JScrollPane(j);
                     sp.setMaximumSize((new Dimension(TABLE_WIDTH, 0)));
                     panel.add(sp);
-                break;
-                case "Exit Stats": 
+                    break;
+                case "Exit Stats":
                     i=0;
                     stats = new Object[runningExStats.size()][4];
                     for (String[] str : runningExStats) {
-                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);} 
+                        stats[i++] = Arrays.copyOfRange(str, 1, str.length);}
                     j = new JTable(stats, columnNames);
                     sp = new JScrollPane(j);
                     sp.setMaximumSize((new Dimension(TABLE_WIDTH, 0)));
                     panel.add(sp);
-                break;
+                    break;
             }
             panel.repaint();
             panel.revalidate();
-		}
-	}
+        }
+    }
 
-    public static void SaveEOScore(int time, int score, boolean win) { 
+    public static void SaveEOScore(int time, int score, boolean win) {
         runningEOStats.add(new String[]{"EO",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
         write();
     }
 
-    public static void SaveKScore(int time, int score, boolean win) { 
+    public static void SaveKScore(int time, int score, boolean win) {
         runningKStats.add(new String[]{"K",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
         write();
     }
 
-    public static void SaveEWScore(int time, int score, boolean win) { 
+    public static void SaveEWScore(int time, int score, boolean win) {
         runningEWStats.add(new String[]{"EW",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
         write();
     }
 
-    public static void SaveEScore(int time, int score, boolean win) { 
+    public static void SaveEScore(int time, int score, boolean win) {
         runningEStats.add(new String[]{"E",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
         write();
     }
 
-    public static void SaveEOffScore(int time, int score, boolean win) { 
+    public static void SaveEOffScore(int time, int score, boolean win) {
         runningEOffStats.add(new String[]{"EOff",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
         write();
     }
 
-    public static void SaveExScore(int time, int score, boolean win) { 
+    public static void SaveExScore(int time, int score, boolean win) {
         runningExStats.add(new String[]{"Ex",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
         write();
     }
@@ -237,17 +327,17 @@ public class GamePlatform
                 String[] arr = scanner.nextLine().split(":", 5);
                 switch (arr[0]) {
                     case "EO": runningEOStats.add(arr);
-                    break;
+                        break;
                     case "K": runningKStats.add(arr);
-                    break;
+                        break;
                     case "EW": runningEWStats.add(arr);
-                    break;
+                        break;
                     case "E": runningEStats.add(arr);
-                    break;
+                        break;
                     case "EOff": runningEOffStats.add(arr);
-                    break;
+                        break;
                     case "Ex": runningExStats.add(arr);
-                    break;
+                        break;
                 }
             }
         }
