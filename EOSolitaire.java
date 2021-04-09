@@ -26,6 +26,7 @@ import java.awt.event.WindowEvent;
 public class EOSolitaire
 {
 	// CONSTANTS
+	private static final String title = "Even & Odd";
 	public static final int NUM_FINAL_DECKS = 4;
 	public static final int NUM_TABLEAU_DECKS = 9;
 	public static final int NUM_RESERVE_DECKS = 3;
@@ -94,7 +95,7 @@ public class EOSolitaire
 		frame.setVisible(true);
 		frame.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
-				GamePlatform.SaveEOScore(time, score, win);
+				GamePlatform.saveScore(time, score, win, title);
 			}
 		});
 	}
@@ -287,7 +288,7 @@ public class EOSolitaire
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			GamePlatform.SaveEOScore(time, score, win);
+			GamePlatform.saveScore(time, score, win, title);
 			newGameButton.removeActionListener(ngl);
 			showRulesButton.removeActionListener(srl);
 			toggleTimerButton.removeActionListener(ttl);
@@ -302,7 +303,7 @@ public class EOSolitaire
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			GamePlatform.SaveEOScore(time, score, win);
+			GamePlatform.saveScore(time, score, win, title);
 			newGameButton.removeActionListener(ngl);
 			showRulesButton.removeActionListener(srl);
 			toggleTimerButton.removeActionListener(ttl);
@@ -700,12 +701,7 @@ public class EOSolitaire
 }
 
 class ImagePanel extends JPanel {
-
 	private Image img;
-
-	public ImagePanel(String img) {
-		this(new ImageIcon(img).getImage());
-	}
 
 	public ImagePanel(Image img) {
 		this.img = img;

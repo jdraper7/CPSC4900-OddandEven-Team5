@@ -24,6 +24,7 @@ import java.awt.event.WindowEvent;
 public class KSolitaire
 {
 	// CONSTANTS
+	private static final String title = "Klondike";
 	public static int TABLE_HEIGHT;
 	public static int TABLE_WIDTH;
 	public static final int NUM_FINAL_DECKS = 4;
@@ -137,7 +138,7 @@ public class KSolitaire
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			GamePlatform.SaveKScore(time, score, win);
+			GamePlatform.saveScore(time, score, win, title);
 			newGameButton.removeActionListener(ngl);
 			showRulesButton.removeActionListener(srl);
 			toggleTimerButton.removeActionListener(ttl);
@@ -153,7 +154,7 @@ public class KSolitaire
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			GamePlatform.SaveKScore(time, score, false);
+			GamePlatform.saveScore(time, score, false, title);
 			newGameButton.removeActionListener(ngl);
 			showRulesButton.removeActionListener(srl);
 			toggleTimerButton.removeActionListener(ttl);
@@ -816,7 +817,7 @@ public class KSolitaire
 		frame.setVisible(true);
 		frame.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
-				GamePlatform.SaveKScore(time, score, win);
+				GamePlatform.saveScore(time, score, win, title);
 			}
 		});
 	}
