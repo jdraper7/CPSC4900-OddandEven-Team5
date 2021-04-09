@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -18,19 +19,23 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class EOSolitaire
 {
 	// CONSTANTS
+	private static final String title = "Even & Odd";
 	public static final int NUM_FINAL_DECKS = 4;
 	public static final int NUM_TABLEAU_DECKS = 9;
 	public static final int NUM_RESERVE_DECKS = 3;
 	public static final Point DECK_POS = new Point(5, 5);
+
 	public static final Point SHOW_POS = new Point(DECK_POS.x + EOCard.CARD_WIDTH + 5, DECK_POS.y);
 	public static final Point FINAL_POS = new Point(SHOW_POS.x + EOCard.CARD_WIDTH + 265, DECK_POS.y);
 	public static final Point PLAY_POS = new Point(DECK_POS.x, FINAL_POS.y + EOCard.CARD_HEIGHT + 260);
+
 	private static int TABLE_WIDTH;
 	private static int TABLE_HEIGHT;
 
@@ -46,7 +51,7 @@ public class EOSolitaire
 	// GUI COMPONENTS (top level)
 	private static final JFrame frame = new JFrame("Even and Odd Solitaire");
 	private static JFrame gpFrame;
-	protected static final JPanel table = new JPanel();
+	protected static final ImagePanel table = new ImagePanel(new ImageIcon("assets/images/backgrounds/even_and_odd.jpg").getImage());
 	// other components
 	private static JButton showRulesButton = new JButton("Show Rules");
 	private static JButton menuReturnButton = new JButton("Return to Menu");
@@ -62,27 +67,25 @@ public class EOSolitaire
 	private static ShowRulesListener srl = new ShowRulesListener();
 	private static CardMovementManager cmm = new CardMovementManager();
 	private static boolean win = false;
-	private static boolean fc;
 
 	// TIMER UTILITIES
 	private static Timer timer;
 	private static ScoreClock scoreClock = new ScoreClock();
 
 	// MISC TRACKING VARIABLES
-	private static boolean timeRunning = false;// timer running?
-	private static int score = 0;// keep track of the score
-	private static int time = 0;// keep track of seconds elapsed
+	private  static boolean timeRunning = false;// timer running?
+	private  static int score = 0;// keep track of the score
+	private  static int time = 0;// keep track of seconds elapsed
 
-	public EOSolitaire(int tw, int th, JFrame gp, Color color, boolean fontColor)
+	public EOSolitaire(int tw, int th, JFrame gp)
 	{
 		gpFrame = gp;
-		fc = fontColor;
 		gpFrame.setVisible(false);
 		TABLE_WIDTH = tw; TABLE_HEIGHT = th;
 		Container contentPane;
 		frame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
 		table.setLayout(null);
-		table.setBackground(color);
+//		table.setBackground(new Color(0, 180, 0));
 		contentPane = frame.getContentPane();
 		contentPane.add(table);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,7 +95,7 @@ public class EOSolitaire
 		frame.setVisible(true);
 		frame.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
-				GamePlatform.SaveEOScore(time, score, win);
+				GamePlatform.saveScore(time, score, win, title);
 			}
 		});
 	}
@@ -187,13 +190,13 @@ public class EOSolitaire
 		showRulesButton.setBounds(120, TABLE_HEIGHT - 70, 120, 30);
 
 		scoreBox.setBounds(240, TABLE_HEIGHT - 70, 120, 30);
-		scoreBox.setForeground(fc?Color.black:Color.white);
+		scoreBox.setForeground(Color.white);
 		scoreBox.setText("Score: 0");
 		scoreBox.setEditable(false);
 		scoreBox.setOpaque(false);
 
 		timeBox.setBounds(360, TABLE_HEIGHT - 70, 120, 30);
-		timeBox.setForeground(fc?Color.black:Color.white);
+		timeBox.setForeground(Color.white);
 		timeBox.setText("Seconds: 0");
 		timeBox.setEditable(false);
 		timeBox.setOpaque(false);
@@ -285,7 +288,7 @@ public class EOSolitaire
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			GamePlatform.SaveEOScore(time, score, win);
+			GamePlatform.saveScore(time, score, win, title);
 			newGameButton.removeActionListener(ngl);
 			showRulesButton.removeActionListener(srl);
 			toggleTimerButton.removeActionListener(ttl);
@@ -300,7 +303,7 @@ public class EOSolitaire
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			GamePlatform.SaveEOScore(time, score, win);
+			GamePlatform.saveScore(time, score, win, title);
 			newGameButton.removeActionListener(ngl);
 			showRulesButton.removeActionListener(srl);
 			toggleTimerButton.removeActionListener(ttl);
@@ -404,7 +407,7 @@ public class EOSolitaire
 					}
 				}
 			}
-			if (card == null) 
+			if (card == null)
 			{
 				for (int x = 0; x < (NUM_TABLEAU_DECKS); x++)
 				{
@@ -425,7 +428,7 @@ public class EOSolitaire
 					}
 				}
 			}
-			if (card == null && waste.contains(start)) 
+			if (card == null && waste.contains(start))
 			{
 				card = waste.pop();
 			}
@@ -446,12 +449,12 @@ public class EOSolitaire
 		{
 			// used for status bar updates
 			boolean validMoveMade = false;
-			
+
 			// SHOW CARD MOVEMENTS
 			if (waste.contains(start) && !newCardButton.contains(start))
 			{
 				// Moving from SHOW TO FINAL
-				if (card.getValue().ordinal()%2==0) 
+				if (card.getValue().ordinal()%2==0)
 				{
 					for (int x = 0; x < NUM_FINAL_DECKS; x++)
 					{
@@ -483,7 +486,7 @@ public class EOSolitaire
 						}
 					}
 				}
-				else 
+				else
 				{
 					for (int x = 0; x < NUM_FINAL_DECKS; x++)
 					{
@@ -517,9 +520,9 @@ public class EOSolitaire
 				}
 			}
 
-			if (card != null && source != null && card.getFaceStatus()) 
+			if (card != null && source != null && card.getFaceStatus())
 			{
-				if (card.getValue().ordinal()%2==0) 
+				if (card.getValue().ordinal()%2==0)
 				{
 					for (int x = 0; x < NUM_FINAL_DECKS; x++)
 					{
@@ -548,7 +551,7 @@ public class EOSolitaire
 								validMoveMade = true;
 								break;
 							}// TO POPULATED STACK
-						} 
+						}
 						else if (validFinalStackMove(card, dest.getLast()))
 						{
 							EOCard c = source.popFirst();
@@ -601,7 +604,7 @@ public class EOSolitaire
 								validMoveMade = true;
 								break;
 							}// TO POPULATED STACK
-						} 
+						}
 						else if (validFinalStackMove(card, dest.getLast()))
 						{
 							EOCard c = source.popFirst();
@@ -625,7 +628,7 @@ public class EOSolitaire
 						}
 					}
 				}
-				if (sourceInTableau && validMoveMade) 
+				if (sourceInTableau && validMoveMade)
 				{
 					if (!waste.empty()) {
 						source.push(waste.pop().setFaceup());
@@ -680,7 +683,7 @@ public class EOSolitaire
 				win = true;
 			}
 
-			if (waste.empty() && !deck.empty()) 
+			if (waste.empty() && !deck.empty())
 			{
 				waste.push(deck.pop().setFaceup());
 			}
@@ -694,5 +697,21 @@ public class EOSolitaire
 			gameOver = false;
 			sourceInTableau = false;
 		}
+	}
+}
+
+class ImagePanel extends JPanel {
+	private Image img;
+
+	public ImagePanel(Image img) {
+		this.img = img;
+		Dimension size = new Dimension(1080, 5500);
+		setPreferredSize(size);
+		setSize(size);
+		setLayout(null);
+	}
+
+	public void paintComponent(Graphics g) {
+		g.drawImage(img, 0, 0, null);
 	}
 }
