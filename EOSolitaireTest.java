@@ -5,7 +5,8 @@ import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EOSolitaireTest {
+class EOSolitaireTest
+{
     @Test
     void moveCard() {
         int x = 0;
@@ -17,41 +18,41 @@ class EOSolitaireTest {
         assertEquals(y, c.getY());
     }
 
-//    @Test
-//    void setScore() {
-//        JFrame gpFrame = new JFrame("Even and Odd Solitaire");;
-//        EOSolitaire test = new EOSolitaire(0, 0 , gpFrame);
-//        test.setScore(10);
-//        assertEquals(10, test.score);
-//    }
-//
-//    @Test
-//    void updateTimer() {
-//        // initialize
-//        JFrame gpFrame = new JFrame("Even and Odd Solitaire");;
-//        EOSolitaire test = new EOSolitaire(0, 0 , gpFrame);
-//        test.updateTimer();
-//        assertEquals(1, test.time);
-//    }
-//
-//
-//    @Test
-//    void startTimer() {
-//        JFrame gpFrame = new JFrame("Even and Odd Solitaire");;
-//        EOSolitaire test = new EOSolitaire(0, 0 , gpFrame);
-//        test.startTimer();
-//        assertSame(true, test.timeRunning);
-//
-//    }
-//
-//    @Test
-//    void toggleTimer() {
-//        JFrame gpFrame = new JFrame("Even and Odd Solitaire");;
-//        EOSolitaire test = new EOSolitaire(0, 0 , gpFrame);
-//        assertSame(true, test.timeRunning);
-//        test.toggleTimer();
-//        assertSame(false, test.timeRunning);
-//        test.toggleTimer();
-//        assertSame(true, test.timeRunning);
-//    }
+    @Test
+    void setScore() {
+        JFrame gpFrame = new JFrame("Even and Odd Solitaire");;
+        EOSolitaire test = new EOSolitaire(0, 0 , gpFrame, new Color(0,0,0), false);
+        test.setScore(10);
+        assertEquals(10, test.score);
+    }
+
+    @Test
+    void updateTimer() {
+        // initialize
+        JFrame gpFrame = new JFrame("Even and Odd Solitaire");;
+        EOSolitaire test = new EOSolitaire(0, 0 , gpFrame, new Color(0,0,0), false);
+        test.updateTimer();
+        assertEquals(1, test.time);
+    }
+
+
+    @Test
+    void startTimer() {
+        JFrame gpFrame = new JFrame("Even and Odd Solitaire");;
+        EOSolitaire test = new EOSolitaire(0, 0 , gpFrame, new Color(0,0,0), false);
+        test.startTimer();
+        assertSame(true, test.timeRunning);
+
+    }
+
+    @Test
+    void toggleTimer() {
+        JFrame gpFrame = new JFrame("Even and Odd Solitaire");;
+        EOSolitaire test = new EOSolitaire(0, 0 , gpFrame, new Color(0,0,0), false);
+        assertSame(true, test.timeRunning);
+        test.toggleTimer();
+        assertSame(false, test.timeRunning);
+        test.toggleTimer();
+        assertSame(true, test.timeRunning);
+    }
 }
