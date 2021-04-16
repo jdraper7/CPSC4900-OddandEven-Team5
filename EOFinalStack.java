@@ -48,7 +48,7 @@ class EOFinalStack extends EOCardStack
 			// draw back of card if empty
 			Graphics2D g2d = (Graphics2D) g;
 			RoundRectangle2D rect = new RoundRectangle2D.Double(0, 0, EOCard.CARD_WIDTH, EOCard.CARD_HEIGHT,
-			EOCard.CORNER_ANGLE, EOCard.CORNER_ANGLE);
+					EOCard.CORNER_ANGLE, EOCard.CORNER_ANGLE);
 			g2d.setColor(Color.LIGHT_GRAY);
 			g2d.fill(rect);
 			g2d.setColor(Color.black);

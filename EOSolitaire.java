@@ -4,10 +4,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JButton;
@@ -18,17 +16,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.Font;
+import javax.swing.*;
 
-public class EOSolitaire
-{
+public class EOSolitaire {
 	// CONSTANTS
+	private static final String title = "Even & Odd";
 	public static final int NUM_FINAL_DECKS = 4;
 	public static final int NUM_TABLEAU_DECKS = 9;
 	public static final int NUM_RESERVE_DECKS = 3;
 	public static final Point DECK_POS = new Point(5, 5);
+
 	public static final Point SHOW_POS = new Point(DECK_POS.x + EOCard.CARD_WIDTH + 5, DECK_POS.y);
 	public static final Point FINAL_POS = new Point(SHOW_POS.x + EOCard.CARD_WIDTH + 265, DECK_POS.y);
 	public static final Point PLAY_POS = new Point(DECK_POS.x, FINAL_POS.y + EOCard.CARD_HEIGHT + 260);
@@ -48,7 +45,7 @@ public class EOSolitaire
 	// GUI COMPONENTS (top level)
 	private static final JFrame frame = new JFrame("Even and Odd Solitaire");
 	private static JFrame gpFrame;
-	protected static final JPanel table = new JPanel();
+	protected static final ImagePanel table = new ImagePanel(new ImageIcon("assets/images/backgrounds/even_and_odd.jpg").getImage());
 	// other components
 	private static JButton showRulesButton = new JButton("Show Rules");
 	private static JButton menuReturnButton = new JButton("Return to Menu");
@@ -62,9 +59,7 @@ public class EOSolitaire
 	private static MenuReturnListener mrl = new MenuReturnListener();
 	private static ToggleTimerListener ttl = new ToggleTimerListener();
 	private static ShowRulesListener srl = new ShowRulesListener();
-	private static CardMovementManager cmm = new CardMovementManager();
 	private static boolean win = false;
-	private static boolean fc;
 
 	// TIMER UTILITIES
 	private static Timer timer;
@@ -75,66 +70,62 @@ public class EOSolitaire
 	public static int score = 0;// keep track of the score
 	public static int time = 0;// keep track of seconds elapsed
 
-	public EOSolitaire(int tw, int th, JFrame gp, Color color, boolean fontColor)
-	{
+	public EOSolitaire(int tw, int th, JFrame gp) {
 		gpFrame = gp;
-		fc = fontColor;
 		gpFrame.setVisible(false);
-		TABLE_WIDTH = tw; TABLE_HEIGHT = th;
+		TABLE_WIDTH = tw;
+		TABLE_HEIGHT = th;
 		Container contentPane;
 		frame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
 		table.setLayout(null);
-		table.setBackground(color);
+//		table.setBackground(new Color(0, 180, 0));
 		contentPane = frame.getContentPane();
 		contentPane.add(table);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		playNewGame();
-		table.addMouseListener(cmm);
+//		table.init();
+		frame.setLocationRelativeTo(null);
+
 		frame.setVisible(true);
-		frame.addWindowListener(new WindowAdapter(){
-			public void windowClosing(WindowEvent e){
-				GamePlatform.SaveEOScore(time, score, win);
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				GamePlatform.saveScore(time, score, win, title);
 			}
 		});
 	}
 
-	static void playNewGame()
-	{
-		score = 0; time = 0; win = false;
+	private static void playNewGame() {
+		score = 0;
+		time = 0;
+		win = false;
 		deck = new EOCardStack(true); // deal 52 cards
 		deck.shuffle();
 		table.removeAll();
-		// reset stacks if user starts a new game in the middle of one
-		if (tableau != null && reserve != null && foundationA != null && foundationB != null)
-		{
-			for (int x = 0; x < NUM_TABLEAU_DECKS; x++)
-			{
+		// reset stacks if user click_positions a new game in the middle of one
+		if (tableau != null && reserve != null && foundationA != null && foundationB != null) {
+			for (int x = 0; x < NUM_TABLEAU_DECKS; x++) {
 				tableau[x].makeEmpty();
 			}
-			for (int x = 0; x < NUM_RESERVE_DECKS; x++)
-			{
+			for (int x = 0; x < NUM_RESERVE_DECKS; x++) {
 				reserve[x].makeEmpty();
 			}
-			for (int x = 0; x < NUM_FINAL_DECKS; x++)
-			{
+			for (int x = 0; x < NUM_FINAL_DECKS; x++) {
 				foundationA[x].makeEmpty();
 			}
-			for (int x = 0; x < NUM_FINAL_DECKS; x++)
-			{
+			for (int x = 0; x < NUM_FINAL_DECKS; x++) {
 				foundationB[x].makeEmpty();
 			}
 		}
 		// initialize & place final (foundation) decks/stacks
 		foundationA = new EOFinalStack[NUM_FINAL_DECKS];
 		foundationB = new EOFinalStack[NUM_FINAL_DECKS];
-		for (int x = 0; x < NUM_FINAL_DECKS; x++)
-		{
+		for (int x = 0; x < NUM_FINAL_DECKS; x++) {
 			foundationA[x] = new EOFinalStack();
 			foundationA[x].setXY((FINAL_POS.x + (x * EOCard.CARD_WIDTH)) + 10, FINAL_POS.y);
 			table.add(foundationA[x]);
 
 			foundationB[x] = new EOFinalStack();
-			foundationB[x].setXY((FINAL_POS.x + ((x+4) * EOCard.CARD_WIDTH)) + 40, FINAL_POS.y);
+			foundationB[x].setXY((FINAL_POS.x + ((x + 4) * EOCard.CARD_WIDTH)) + 40, FINAL_POS.y);
 			table.add(foundationB[x]);
 
 		}
@@ -142,17 +133,15 @@ public class EOSolitaire
 		table.add(moveCard(newCardButton, DECK_POS.x, DECK_POS.y));
 		// initialize & place play (tableau) decks/stacks
 		reserve = new EOCardStack[NUM_RESERVE_DECKS];
-		for (int x = 0; x < NUM_RESERVE_DECKS; x++)
-		{
+		for (int x = 0; x < NUM_RESERVE_DECKS; x++) {
 			reserve[x] = new EOCardStack(false);
 			reserve[x].setXY((DECK_POS.x + (x * (EOCard.CARD_WIDTH + 10))), PLAY_POS.y);
 			table.add(reserve[x]);
 		}
 		tableau = new EOCardStack[NUM_TABLEAU_DECKS];
-		for (int x = 0; x < NUM_TABLEAU_DECKS; x++)
-		{
+		for (int x = 0; x < NUM_TABLEAU_DECKS; x++) {
 			tableau[x] = new EOCardStack(false);
-			tableau[x].setXY((DECK_POS.x + ((x+3) * (EOCard.CARD_WIDTH + 10))), PLAY_POS.y);
+			tableau[x].setXY((DECK_POS.x + ((x + 3) * (EOCard.CARD_WIDTH + 10))), PLAY_POS.y);
 			table.add(tableau[x]);
 		}
 		waste = new EOWasteStack();
@@ -160,16 +149,13 @@ public class EOSolitaire
 		table.add(waste);
 
 		// Dealing new game
-		for (int x = 0; x < NUM_RESERVE_DECKS; x++)
-		{
-			for (int y = 0; y < 5; y++)
-			{
+		for (int x = 0; x < NUM_RESERVE_DECKS; x++) {
+			for (int y = 0; y < 5; y++) {
 				reserve[x].putFirst(deck.pop());
 			}
 			reserve[x].putFirst(deck.pop().setFaceup());
 		}
-		for (int x = 0; x < NUM_TABLEAU_DECKS; x++)
-		{
+		for (int x = 0; x < NUM_TABLEAU_DECKS; x++) {
 			EOCard c = deck.pop().setFaceup();
 			tableau[x].putFirst(c);
 		}
@@ -188,18 +174,18 @@ public class EOSolitaire
 		showRulesButton.setBounds(120, TABLE_HEIGHT - 70, 120, 30);
 
 		scoreBox.setBounds(240, TABLE_HEIGHT - 70, 120, 30);
-		scoreBox.setForeground(fc?Color.black:Color.white);
+		scoreBox.setForeground(Color.white);
 		scoreBox.setText("Score: 0");
 		scoreBox.setEditable(false);
 		scoreBox.setOpaque(false);
 
 		timeBox.setBounds(360, TABLE_HEIGHT - 70, 120, 30);
-		timeBox.setForeground(fc?Color.black:Color.white);
+		timeBox.setForeground(Color.white);
 		timeBox.setText("Seconds: 0");
 		timeBox.setEditable(false);
 		timeBox.setOpaque(false);
 
-		startTimer();
+		click_positionTimer();
 
 		toggleTimerButton.setBounds(480, TABLE_HEIGHT - 70, 125, 30);
 		toggleTimerButton.addActionListener(ttl);
@@ -219,16 +205,14 @@ public class EOSolitaire
 	}
 
 	// moves a card to abs location within a component
-	protected static EOCard moveCard(EOCard c, int x, int y)
-	{
+	protected static EOCard moveCard(EOCard c, int x, int y) {
 		c.setBounds(new Rectangle(new Point(x, y), new Dimension(EOCard.CARD_WIDTH + 10, EOCard.CARD_HEIGHT + 10)));
 		c.setXY(new Point(x, y));
 		return c;
 	}
 
 	// add/subtract points based on gameplay actions
-	protected static void setScore(int deltaScore)
-	{
+	protected static void setScore(int deltaScore) {
 		EOSolitaire.score += deltaScore;
 		String newScore = "Score: " + EOSolitaire.score;
 		scoreBox.setText(newScore);
@@ -236,12 +220,10 @@ public class EOSolitaire
 	}
 
 	// GAME TIMER UTILITIES
-	protected static void updateTimer()
-	{
+	protected static void updateTimer() {
 		EOSolitaire.time += 1;
 		// every 10 seconds elapsed we take away 2 points
-		if (EOSolitaire.time % 10 == 0)
-		{
+		if (EOSolitaire.time % 10 == 0) {
 			setScore(-2);
 		}
 		String time = "Seconds: " + EOSolitaire.time;
@@ -249,8 +231,7 @@ public class EOSolitaire
 		timeBox.repaint();
 	}
 
-	protected static void startTimer()
-	{
+	protected static void click_positionTimer() {
 		scoreClock = new ScoreClock();
 		// set the timer to update every second
 		timer = new Timer();
@@ -259,34 +240,27 @@ public class EOSolitaire
 	}
 
 	// the pause timer button uses this
-	protected static void toggleTimer()
-	{
-		if (timeRunning && scoreClock != null)
-		{
+	protected static void toggleTimer() {
+		if (timeRunning && scoreClock != null) {
 			scoreClock.cancel();
 			timeRunning = false;
-		} else
-		{
-			startTimer();
+		} else {
+			click_positionTimer();
 		}
 	}
 
-	private static class ScoreClock extends TimerTask
-	{
+	private static class ScoreClock extends TimerTask {
 		@Override
-		public void run()
-		{
+		public void run() {
 			updateTimer();
 		}
 	}
 
 	// BUTTON LISTENERS
-	private static class NewGameListener implements ActionListener
-	{
+	private static class NewGameListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			GamePlatform.SaveEOScore(time, score, win);
+		public void actionPerformed(ActionEvent e) {
+			GamePlatform.saveScore(time, score, win, title);
 			newGameButton.removeActionListener(ngl);
 			showRulesButton.removeActionListener(srl);
 			toggleTimerButton.removeActionListener(ttl);
@@ -296,28 +270,24 @@ public class EOSolitaire
 		}
 	}
 
-	private static class MenuReturnListener implements ActionListener
-	{
+	private static class MenuReturnListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			GamePlatform.SaveEOScore(time, score, win);
+		public void actionPerformed(ActionEvent e) {
+			GamePlatform.saveScore(time, score, win, title);
 			newGameButton.removeActionListener(ngl);
 			showRulesButton.removeActionListener(srl);
 			toggleTimerButton.removeActionListener(ttl);
 			menuReturnButton.removeActionListener(mrl);
-			table.removeMouseListener(cmm);
+//			table.removeMouseListener();
 			frame.setVisible(false);
 			frame.dispose();
 			gpFrame.setVisible(true);
 		}
 	}
 
-	private static class ShowRulesListener implements ActionListener
-	{
+	private static class ShowRulesListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent e)
-		{
+		public void actionPerformed(ActionEvent e) {
 			JDialog ruleFrame = new JDialog(frame, true);
 			ruleFrame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			ruleFrame.setSize(800, 600);
@@ -328,8 +298,8 @@ public class EOSolitaire
 					+ "<br><br><b>Difficulty:</b> EASY"
 					+ "<br><br><b>Even and Odd Solitaire </b>uses one deck (52 cards). You have 9 tableau piles with one card in each pile and 3 reserve piles (with 6 cards in each pile). You also have 8 foundation piles."
 					+ "<br><br><b>Objective</b>"
-					+ "<br><ul><li>Build up the left four foundations in ascending sequence regardless of suit by twos starting with Ace (Ace,3,5,7,9,J,K) and</li>"
-					+ "<li>Build up the right four foundations in ascending sequence regardless of suit by twos starting with 2 (2,4,6,8,10,Q)</li></ul>"
+					+ "<br><ul><li>Build up the left four foundations in ascending sequence regardless of suit by twos click_positioning with Ace (Ace,3,5,7,9,J,K) and</li>"
+					+ "<li>Build up the right four foundations in ascending sequence regardless of suit by twos click_positioning with 2 (2,4,6,8,10,Q)</li></ul>"
 					+ "<b>Rules</b>"
 					+ "<br>Each tableau pile may contain only one card. All cards in tableaus, top cards of reserve, stock and waste piles are available to play. Spaces in tableaus are filled from waste or stock piles. Empty reserve piles cannot be filled."
 					+ "<br><br>When you have made all the moves initially available, begin turning over cards from the stock pile."
@@ -340,17 +310,13 @@ public class EOSolitaire
 		}
 	}
 
-	private static class ToggleTimerListener implements ActionListener
-	{
+	private static class ToggleTimerListener implements ActionListener {
 		@Override
-		public void actionPerformed(ActionEvent e)
-		{
+		public void actionPerformed(ActionEvent e) {
 			toggleTimer();
-			if (!timeRunning)
-			{
-				toggleTimerButton.setText("Start Timer");
-			} else
-			{
+			if (!timeRunning) {
+				toggleTimerButton.setText("click_position Timer");
+			} else {
 				toggleTimerButton.setText("Pause Timer");
 			}
 		}
@@ -361,63 +327,64 @@ public class EOSolitaire
 	 * as the game logic. This determines where Cards can be moved according to
 	 * the rules of Even and Odd Solitaire
 	 */
-	private static class CardMovementManager extends MouseAdapter
-	{
-		private boolean checkForWin = false;// should we check if game is over?
-		private boolean gameOver = true;// easier to negate this than affirm it
-		private Point start = null;// where mouse was clicked
-		private EOCard card = null; // card to be moved
-		private EOCardStack source = null;
-		private boolean sourceInTableau = false;
-		private EOCardStack dest = null;
+	static class CardMovementManager implements MouseListener {
 
-		private boolean validFinalStackMove(EOCard source, EOCard dest)
-		{
-			int s_val = source.getValue().ordinal();
-			int d_val = dest.getValue().ordinal();
-			if (s_val == (d_val + 2)) // destination must be two lower
-				return true;
-			else
-				return false;
+			private boolean checkForWin = false;// should we check if game is over?
+			private boolean gameOver = true;// easier to negate this than affirm it
+			private Point click_position = null;// where mouse was clicked
+			private Point last_click_position = new Point(1, 1);// where mouse was clicked
+			private EOCard card = null; // card to be moved
+			private EOCardStack source = null;
+			private boolean sourceInTableau = false;
+			private EOCardStack dest = null;
+
+
+			private boolean validFinalStackMove(EOCard clicked_card, EOCard dest) {
+				int s_val = clicked_card.getValue().ordinal();
+				int d_val = dest.getValue().ordinal();
+				if (s_val == (d_val + 2)) // destination must be two lower
+					return true;
+				else
+					return false;
+			}
+
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+
 		}
 
 		@Override
-		public void mousePressed(MouseEvent e)
-		{
-			start = e.getPoint();
+		public void mousePressed(MouseEvent e) {
+
+			System.out.println("mousepressed");
+			Point start = e.getPoint();
 			boolean stopSearch = false;
 			statusBox.setText("");
 
-			for (int x = 0; x < (NUM_RESERVE_DECKS); x++)
-			{
+			for (int x = 0; x < (NUM_RESERVE_DECKS); x++) {
 				if (stopSearch)
 					break;
 				source = reserve[x];
 				// pinpointing exact card pressed
-				for (Component ca : source.getComponents())
-				{
+				for (Component ca : source.getComponents()) {
 					EOCard c = (EOCard) ca;
-					if (c.contains(start) && source.contains(start) && c.getFaceStatus())
-					{
+					if (c.contains(start) && source.contains(start) && c.getFaceStatus()) {
 						card = c;
 						stopSearch = true;
 						break;
 					}
 				}
 			}
-			if (card == null) 
-			{
-				for (int x = 0; x < (NUM_TABLEAU_DECKS); x++)
-				{
+			if (card == null) {
+				for (int x = 0; x < (NUM_TABLEAU_DECKS); x++) {
 					if (stopSearch)
 						break;
 					source = tableau[x];
 					// pinpointing exact card pressed
-					for (Component ca : source.getComponents())
-					{
+					for (Component ca : source.getComponents()) {
 						EOCard c = (EOCard) ca;
-						if (c.contains(start) && source.contains(start) && c.getFaceStatus())
-						{
+						if (c.contains(start) && source.contains(start) && c.getFaceStatus()) {
 							card = c;
 							stopSearch = true;
 							sourceInTableau = true;
@@ -426,42 +393,36 @@ public class EOSolitaire
 					}
 				}
 			}
-			if (card == null && waste.contains(start)) 
-			{
+			if (card == null && waste.contains(start)) {
 				card = waste.pop();
 			}
 
 			// SHOW (WASTE) CARD OPERATIONS
 			// display new show card
-			if (newCardButton.contains(start) && deck.showSize() > 0)
-			{
+			if (newCardButton.contains(start) && deck.showSize() > 0) {
+				System.out.println("new card button");
 				EOCard c = deck.pop().setFaceup();
 				waste.push(c);
 				c.repaint();
 				table.repaint();
 			}
-		}
 
-		@Override
-		public void mouseReleased(MouseEvent e)
-		{
+			System.out.println("released");
 			// used for status bar updates
 			boolean validMoveMade = false;
-			
+
 			// SHOW CARD MOVEMENTS
-			if (waste.contains(start) && !newCardButton.contains(start))
-			{
+			if (waste.contains(start) && !newCardButton.contains(start)) {
+				System.out.println("1");
 				// Moving from SHOW TO FINAL
-				if (card.getValue().ordinal()%2==0) 
-				{
-					for (int x = 0; x < NUM_FINAL_DECKS; x++)
-					{
+				if (card.getValue().ordinal() % 2 == 0) {
+					System.out.println("2");
+					for (int x = 0; x < NUM_FINAL_DECKS; x++) {
+						System.out.println("3");
 						dest = foundationA[x];
 						// only aces can go first
-						if (dest.empty())
-						{
-							if (card.getValue() == EOCard.Value.ACE)
-							{
+						if (dest.empty()) {
+							if (card.getValue() == EOCard.Value.ACE) {
 								dest.push(card);
 								dest.repaint();
 								table.repaint();
@@ -470,9 +431,8 @@ public class EOSolitaire
 								validMoveMade = true;
 								break;
 							}
-						}
-						else if (validFinalStackMove(card, dest.getLast()))
-						{
+						} else if (validFinalStackMove(card, dest.getLast())) {
+							System.out.println("reloop?");
 							dest.push(card);
 							dest.repaint();
 							table.repaint();
@@ -483,17 +443,14 @@ public class EOSolitaire
 							break;
 						}
 					}
-				}
-				else 
-				{
-					for (int x = 0; x < NUM_FINAL_DECKS; x++)
-					{
+				} else {
+					for (int x = 0; x < NUM_FINAL_DECKS; x++) {
 						dest = foundationB[x];
 						// only twos can go first
-						if (dest.empty())
-						{
-							if (card.getValue() == EOCard.Value.TWO)
-							{
+						if (dest.empty()) {
+							if (card.getValue() == EOCard.Value.TWO) {
+								System.out.println("4");
+								System.out.println("card");
 								dest.push(card);
 								dest.repaint();
 								table.repaint();
@@ -502,9 +459,7 @@ public class EOSolitaire
 								validMoveMade = true;
 								break;
 							}
-						}
-						else if (validFinalStackMove(card, dest.getLast()))
-						{
+						} else if (validFinalStackMove(card, dest.getLast())) {
 							dest.push(card);
 							dest.repaint();
 							table.repaint();
@@ -518,23 +473,18 @@ public class EOSolitaire
 				}
 			}
 
-			if (card != null && source != null && card.getFaceStatus()) 
-			{
-				if (card.getValue().ordinal()%2==0) 
-				{
-					for (int x = 0; x < NUM_FINAL_DECKS; x++)
-					{
+			if (card != null && source != null && card.getFaceStatus()) {
+				if (card.getValue().ordinal() % 2 == 0) {
+					for (int x = 0; x < NUM_FINAL_DECKS; x++) {
 						dest = foundationA[x];
 
 						// TO EMPTY STACK
 						if (dest.empty())// empty final should only take an ACE
 						{
-							if (card.getValue() == EOCard.Value.ACE)
-							{
+							if (card.getValue() == EOCard.Value.ACE) {
 								EOCard c = source.popFirst();
 								c.repaint();
-								if (source.getFirst() != null)
-								{
+								if (source.getFirst() != null) {
 									EOCard temp = source.getFirst().setFaceup();
 									temp.repaint();
 									source.repaint();
@@ -549,13 +499,10 @@ public class EOSolitaire
 								validMoveMade = true;
 								break;
 							}// TO POPULATED STACK
-						} 
-						else if (validFinalStackMove(card, dest.getLast()))
-						{
+						} else if (validFinalStackMove(card, dest.getLast())) {
 							EOCard c = source.popFirst();
 							c.repaint();
-							if (source.getFirst() != null)
-							{
+							if (source.getFirst() != null) {
 								EOCard temp = source.getFirst().setFaceup();
 								temp.repaint();
 								source.repaint();
@@ -572,22 +519,17 @@ public class EOSolitaire
 							break;
 						}
 					}
-				}
-				else
-				{
-					for (int x = 0; x < NUM_FINAL_DECKS; x++)
-					{
+				} else {
+					for (int x = 0; x < NUM_FINAL_DECKS; x++) {
 						dest = foundationB[x];
 
 						// TO EMPTY STACK
 						if (dest.empty())// empty final should only take an ACE
 						{
-							if (card.getValue() == EOCard.Value.TWO)
-							{
+							if (card.getValue() == EOCard.Value.TWO) {
 								EOCard c = source.popFirst();
 								c.repaint();
-								if (source.getFirst() != null)
-								{
+								if (source.getFirst() != null) {
 									EOCard temp = source.getFirst().setFaceup();
 									temp.repaint();
 									source.repaint();
@@ -602,13 +544,10 @@ public class EOSolitaire
 								validMoveMade = true;
 								break;
 							}// TO POPULATED STACK
-						} 
-						else if (validFinalStackMove(card, dest.getLast()))
-						{
+						} else if (validFinalStackMove(card, dest.getLast())) {
 							EOCard c = source.popFirst();
 							c.repaint();
-							if (source.getFirst() != null)
-							{
+							if (source.getFirst() != null) {
 								EOCard temp = source.getFirst().setFaceup();
 								temp.repaint();
 								source.repaint();
@@ -626,43 +565,35 @@ public class EOSolitaire
 						}
 					}
 				}
-				if (sourceInTableau && validMoveMade) 
-				{
+				if (sourceInTableau && validMoveMade) {
 					if (!waste.empty()) {
 						source.push(waste.pop().setFaceup());
-					}
-					else if (!deck.empty()) {
+					} else if (!deck.empty()) {
 						source.push(deck.pop().setFaceup());
 					}
 				}
 			}
 
 			// SHOWING STATUS MESSAGE IF MOVE INVALID
-			if (!validMoveMade && dest != null && card != null)
-			{
+			if (!validMoveMade && dest != null && card != null) {
 				statusBox.setText("That Is Not A Valid Move");
 			}
 
 			// CHECKING FOR WIN
-			if (checkForWin)
-			{
+			if (checkForWin) {
 				boolean gameNotOver = false;
 				// cycle through final decks, if they're all full then game over
-				for (int x = 0; x < NUM_FINAL_DECKS; x++)
-				{
+				for (int x = 0; x < NUM_FINAL_DECKS; x++) {
 					dest = foundationA[x];
-					if (dest.showSize() != 7)
-					{
+					if (dest.showSize() != 7) {
 						// one deck is not full, so game is not over
 						gameNotOver = true;
 						break;
 					}
 				}
-				for (int x = 0; x < NUM_FINAL_DECKS; x++)
-				{
+				for (int x = 0; x < NUM_FINAL_DECKS; x++) {
 					dest = foundationB[x];
-					if (dest.showSize() != 6)
-					{
+					if (dest.showSize() != 6) {
 						// one deck is not full, so game is not over
 						gameNotOver = true;
 						break;
@@ -672,8 +603,7 @@ public class EOSolitaire
 					gameOver = true;
 			}
 
-			if (checkForWin && gameOver)
-			{
+			if (checkForWin && gameOver) {
 				scoreClock.cancel();
 				timeRunning = false;
 				JOptionPane.showMessageDialog(table, "Congratulations! You've Won!");
@@ -681,8 +611,7 @@ public class EOSolitaire
 				win = true;
 			}
 
-			if (waste.empty() && !deck.empty()) 
-			{
+			if (waste.empty() && !deck.empty()) {
 				waste.push(deck.pop().setFaceup());
 			}
 
@@ -695,5 +624,60 @@ public class EOSolitaire
 			gameOver = false;
 			sourceInTableau = false;
 		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+
+		}
+
+
+		;
+
+			@Override
+			public void mouseEntered(MouseEvent evt) {
+			}
+
+			;
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+
+
 	}
+
+}
+
+
+
+
+
+
+class ImagePanel extends JPanel  {
+	private Image img;
+
+
+
+	public ImagePanel(Image img) {
+		this.img = img;
+		Dimension size = new Dimension(1080, 5500);
+		setPreferredSize(size);
+		setSize(size);
+		setLayout(null);
+		addMouseListener(new EOSolitaire.CardMovementManager());
+	}
+
+
+
+	public void paintComponent(Graphics g) {
+		g.drawImage(img, 0, 0, null);
+	}
+
+//	public void init() {
+//		EOSolitaire.CardMovementManager cmm = new EOSolitaire.CardMovementManager();
+//
+//		addMouseListener(cmm);
+//	}
+
 }
