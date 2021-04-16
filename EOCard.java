@@ -74,14 +74,14 @@ class EOCard extends JPanel
 	{
 		switch (_suit)
 		{
-		case HEARTS:
-			break;
-		case DIAMONDS:
-			break;
-		case SPADES:
-			break;
-		case CLUBS:
-			break;
+			case HEARTS:
+				break;
+			case DIAMONDS:
+				break;
+			case SPADES:
+				break;
+			case CLUBS:
+				break;
 		}
 		return _suit;
 	}
@@ -90,32 +90,32 @@ class EOCard extends JPanel
 	{
 		switch (_value)
 		{
-		case ACE:
-			break;
-		case TWO:
-			break;
-		case THREE:
-			break;
-		case FOUR:
-			break;
-		case FIVE:
-			break;
-		case SIX:
-			break;
-		case SEVEN:
-			break;
-		case EIGHT:
-			break;
-		case NINE:
-			break;
-		case TEN:
-			break;
-		case JACK:
-			break;
-		case QUEEN:
-			break;
-		case KING:
-			break;
+			case ACE:
+				break;
+			case TWO:
+				break;
+			case THREE:
+				break;
+			case FOUR:
+				break;
+			case FIVE:
+				break;
+			case SIX:
+				break;
+			case SEVEN:
+				break;
+			case EIGHT:
+				break;
+			case NINE:
+				break;
+			case TEN:
+				break;
+			case JACK:
+				break;
+			case QUEEN:
+				break;
+			case KING:
+				break;
 		}
 		return _value;
 	}
@@ -204,60 +204,60 @@ class EOCard extends JPanel
 		{
 			switch (_suit)
 			{
-			case HEARTS:
-				drawSuit(g2d, "Hearts", Color.RED);
-				break;
-			case DIAMONDS:
-				drawSuit(g2d, "Diamonds", Color.RED);
-				break;
-			case SPADES:
-				drawSuit(g2d, "Spades", Color.BLACK);
-				break;
-			case CLUBS:
-				drawSuit(g2d, "Clubs", Color.BLACK);
-				break;
+				case HEARTS:
+					drawSuit(g2d, "Hearts", Color.RED);
+					break;
+				case DIAMONDS:
+					drawSuit(g2d, "Diamonds", Color.RED);
+					break;
+				case SPADES:
+					drawSuit(g2d, "Spades", Color.BLACK);
+					break;
+				case CLUBS:
+					drawSuit(g2d, "Clubs", Color.BLACK);
+					break;
 			}
 			switch (_value)
 			{
-			case ACE:
-				drawValue(g2d, "A");
-				break;
-			case TWO:
-				drawValue(g2d, "2");
-				break;
-			case THREE:
-				drawValue(g2d, "3");
-				break;
-			case FOUR:
-				drawValue(g2d, "4");
-				break;
-			case FIVE:
-				drawValue(g2d, "5");
-				break;
-			case SIX:
-				drawValue(g2d, "6");
-				break;
-			case SEVEN:
-				drawValue(g2d, "7");
-				break;
-			case EIGHT:
-				drawValue(g2d, "8");
-				break;
-			case NINE:
-				drawValue(g2d, "9");
-				break;
-			case TEN:
-				drawValue(g2d, "10");
-				break;
-			case JACK:
-				drawValue(g2d, "J");
-				break;
-			case QUEEN:
-				drawValue(g2d, "Q");
-				break;
-			case KING:
-				drawValue(g2d, "K");
-				break;
+				case ACE:
+					drawValue(g2d, "A");
+					break;
+				case TWO:
+					drawValue(g2d, "2");
+					break;
+				case THREE:
+					drawValue(g2d, "3");
+					break;
+				case FOUR:
+					drawValue(g2d, "4");
+					break;
+				case FIVE:
+					drawValue(g2d, "5");
+					break;
+				case SIX:
+					drawValue(g2d, "6");
+					break;
+				case SEVEN:
+					drawValue(g2d, "7");
+					break;
+				case EIGHT:
+					drawValue(g2d, "8");
+					break;
+				case NINE:
+					drawValue(g2d, "9");
+					break;
+				case TEN:
+					drawValue(g2d, "10");
+					break;
+				case JACK:
+					drawValue(g2d, "J");
+					break;
+				case QUEEN:
+					drawValue(g2d, "Q");
+					break;
+				case KING:
+					drawValue(g2d, "K");
+					break;
 			}
 		} else
 		{

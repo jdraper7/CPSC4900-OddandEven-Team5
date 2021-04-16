@@ -143,7 +143,7 @@ class EOWasteStack extends JComponent
 		if (!empty())
 		{
 			add(EOSolitaire.moveCard(this.getLast(), 1, 1));
-		} 
+		}
 		// else
 		// {
 		// 	// draw back of card if empty
