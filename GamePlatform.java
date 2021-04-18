@@ -216,6 +216,7 @@ public class GamePlatform {
         public void mouseEntered(MouseEvent e) {
             hover = true;
             setText(text_hover);
+            setBorder(new LineBorder(Color.green, 3));
             setFont(new Font("Dialog", Font.BOLD, 22));
         }
 
@@ -223,6 +224,8 @@ public class GamePlatform {
         public void mouseExited(MouseEvent e) {
             hover = false;
             setText(text);
+            setBorder(new LineBorder(Color.white, 3));
+
             setFont(new Font("Dialog", Font.BOLD, 20));
         }
 
@@ -305,6 +308,7 @@ public class GamePlatform {
         public void mouseEntered(MouseEvent e) {
             hover = true;
             setText(text_hover);
+            setBorder(new LineBorder(Color.green, 3));
             setFont(new Font("Dialog", Font.BOLD, 14));
         }
 
@@ -312,6 +316,7 @@ public class GamePlatform {
         public void mouseExited(MouseEvent e) {
             hover = false;
             setText(text);
+            setBorder(new LineBorder(Color.white, 3));
             setFont(new Font("Dialog", Font.BOLD, 12));
         }
 

@@ -1,9 +1,7 @@
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.*;
+import java.awt.geom.Point2D;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
@@ -179,14 +177,15 @@ class EOCard extends JPanel
 	private void drawSuit(Graphics2D g, String suit, Color color)
 	{
 		g.setColor(color);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
 		g.drawString(suit, _location.x + x_offset, _location.y + y_offset);
-		g.drawString(suit, _location.x + x_offset, _location.y + CARD_HEIGHT - 5);
+		g.drawString(suit, _location.x + new_x_offset, _location.y + y_offset + CARD_HEIGHT - 25);
 	}
 
 	private void drawValue(Graphics2D g, String value)
 	{
 		g.drawString(value, _location.x + new_x_offset, _location.y + y_offset);
-		g.drawString(value, _location.x + new_x_offset, _location.y + y_offset + CARD_HEIGHT - 25);
+		g.drawString(value, _location.x + x_offset, _location.y + CARD_HEIGHT - 5);
 	}
 
 	@Override
@@ -205,16 +204,16 @@ class EOCard extends JPanel
 			switch (_suit)
 			{
 				case HEARTS:
-					drawSuit(g2d, "Hearts", Color.RED);
+					drawSuit(g2d, "\u2665", Color.RED);
 					break;
 				case DIAMONDS:
-					drawSuit(g2d, "Diamonds", Color.RED);
+					drawSuit(g2d, "\u2666", Color.RED);
 					break;
 				case SPADES:
-					drawSuit(g2d, "Spades", Color.BLACK);
+					drawSuit(g2d, "\u2660", Color.BLACK);
 					break;
 				case CLUBS:
-					drawSuit(g2d, "Clubs", Color.BLACK);
+					drawSuit(g2d, "\u2663", Color.BLACK);
 					break;
 			}
 			switch (_value)
@@ -264,7 +263,36 @@ class EOCard extends JPanel
 			// DRAW THE BACK OF THE CARD IF FACEDOWN
 			RoundRectangle2D rect = new RoundRectangle2D.Double(_location.x, _location.y, CARD_WIDTH, CARD_HEIGHT,
 					CORNER_ANGLE, CORNER_ANGLE);
-			g2d.setColor(Color.LIGHT_GRAY);
+
+			int size = 20;
+			Color rightTop = new Color(255, 254, 55);
+			Color leftBottom = new Color(100, 0, 255);
+			Color leftTop= new Color(237, 0, 3);
+			Color rightBottom = new Color(237, 0, 90);
+			GradientPaint twoColorGradient = new GradientPaint(
+					size, 0f, rightTop, 0, 150, leftBottom);
+
+			float radius = size-(size/4);
+			float[] dist = {0f, 1.0f};
+			Point2D center = new Point2D.Float(0f, 0f);
+			Color noColor = new Color(0f, 0f, 0f, 0f);
+			Color[] colors = {leftTop, noColor};
+			RadialGradientPaint thirdColor = new RadialGradientPaint(center, 25, dist, colors);
+
+
+			center = new Point2D.Float(size, size);
+			Color[] colors2 = {rightBottom, noColor};
+			RadialGradientPaint fourthColor = new RadialGradientPaint(center, 150, dist, colors2);
+
+			g2d.setPaint(twoColorGradient);
+			g2d.fill(rect);
+
+			g2d.setPaint(thirdColor);
+			g2d.fill(rect);
+
+			g2d.setPaint(fourthColor);
+			g2d.fill(rect);
+
 			g2d.fill(rect);
 			g2d.setColor(Color.black);
 			g2d.draw(rect);
