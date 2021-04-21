@@ -14,12 +14,23 @@ import java.util.Scanner;
 import java.util.Date;
 
 public class GamePlatform {
+
     //Main GUI
     protected static final JFrame frame = new JFrame("Card Game Platform - Team 5");
     protected static final ImagePanel game_menu = new ImagePanel( new ImageIcon("assets/images/backgrounds/platform.jpg").getImage());
     protected static final JPanel gui = new JPanel();
     protected static JTable statistics_table;
     protected static JScrollPane statistics_table_scroll_panel;
+
+    //Menu Bar
+    protected static JMenuBar mbar = new JMenuBar();
+    protected static JMenu favs = new JMenu("Favorites");
+    protected static JCheckBoxMenuItem eodd = new JCheckBoxMenuItem("Even and Odd");
+    protected static JCheckBoxMenuItem kl = new JCheckBoxMenuItem("Klondike");
+    protected static JCheckBoxMenuItem ew = new JCheckBoxMenuItem("Eagle Wing");
+    protected static JCheckBoxMenuItem eh = new JCheckBoxMenuItem("Easthaven");
+    protected static JCheckBoxMenuItem eoff = new JCheckBoxMenuItem("Eight Off");
+    protected static JCheckBoxMenuItem ex = new JCheckBoxMenuItem("Exit");
 
     private static final int game_menu_height = EOCard.CARD_HEIGHT * 4+150;
     private static final int game_menu_width = (EOCard.CARD_WIDTH * 12) + 140;
@@ -32,7 +43,8 @@ public class GamePlatform {
     private static final ArrayList<String[]> runningEOffStats = new ArrayList<>();
     private static final ArrayList<String[]> runningExStats = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         read();
         // Layout
         game_menu.setLayout(null);
@@ -94,7 +106,7 @@ public class GamePlatform {
         StatisticsButton statistics_Easthaven = new StatisticsButton(game_title_4);
         statistics_Easthaven.setBounds(x_column_1, y_row_stats_2, width_column, height_stats);
         game_menu.add(statistics_Easthaven);
-        // - EightOff
+        // - Eight Off
         String game_title_5 = "Eight Off";
         LauncherButton launcher_EightOff = new LauncherButton(game_title_5);
         launcher_EightOff.setBounds(x_column_2, y_row_launcher_2, width_column, height_launcher);
@@ -111,11 +123,119 @@ public class GamePlatform {
         statistics_Exit.setBounds(x_column_3, y_row_stats_2, width_column, height_stats);
         game_menu.add(statistics_Exit);
 
+        //Menu Bar (Favorite Games)
+        favs.add(eodd);
+        eodd.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e)
+            {
+                if(eodd.isSelected())
+                {
+                    launcher_EvenAndOdd.setVisible(false);
+                    statistics_EvenAndOdd.setVisible(false);
+                }
+                else
+                {
+                    launcher_EvenAndOdd.setVisible(true);
+                    statistics_EvenAndOdd.setVisible(true);
+                }
+            }
+        });
+        favs.add(kl);
+        kl.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e)
+            {
+                if(kl.isSelected())
+                {
+                    launcher_Klondike.setVisible(false);
+                    statistics_Klondike.setVisible(false);
+                }
+                else
+                {
+                    launcher_Klondike.setVisible(true);
+                    statistics_Klondike.setVisible(true);
+                }
+            }
+        });
+        favs.add(ew);
+        ew.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e)
+            {
+                if(ew.isSelected())
+                {
+                    launcher_EagleWing.setVisible(false);
+                    statistics_EagleWing.setVisible(false);
+                }
+                else
+                {
+                    launcher_EagleWing.setVisible(true);
+                    statistics_EagleWing.setVisible(true);
+                }
+            }
+        });
+        favs.add(eh);
+        eh.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e)
+            {
+                if(eh.isSelected())
+                {
+                    launcher_Easthaven.setVisible(false);
+                    statistics_Easthaven.setVisible(false);
+                }
+                else
+                {
+                    launcher_Easthaven.setVisible(true);
+                    statistics_Easthaven.setVisible(true);
+                }
+            }
+        });
+        favs.add(eoff);
+        eoff.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e)
+            {
+                if(eoff.isSelected())
+                {
+                    launcher_EightOff.setVisible(false);
+                    statistics_EightOff.setVisible(false);
+                }
+                else
+                {
+                    launcher_EightOff.setVisible(true);
+                    statistics_EightOff.setVisible(true);
+                }
+            }
+        });
+        favs.add(ex);
+        ex.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e)
+            {
+                if(ex.isSelected())
+                {
+                    launcher_Exit.setVisible(false);
+                    statistics_Exit.setVisible(false);
+                }
+                else
+                {
+                    launcher_Exit.setVisible(true);
+                    statistics_Exit.setVisible(true);
+                }
+            }
+        });
+        mbar.add(favs);
+        frame.setJMenuBar(mbar);
+
         gui.repaint();
         game_menu.repaint();
 
-        frame.getRootPane().addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent e) {
+        frame.getRootPane().addComponentListener(new ComponentAdapter()
+        {
+            public void componentResized(ComponentEvent e)
+            {
                 // Menu Dimensions Logic.
                 Component frame_data = (Component)e.getSource();
                 int center = (int) (frame_data.getWidth()/2);
@@ -156,7 +276,8 @@ public class GamePlatform {
         });
     }
     
-    static class ImagePanel extends JPanel {
+    static class ImagePanel extends JPanel
+    {
         private Image img;
 
         public ImagePanel(Image img) {
@@ -172,7 +293,8 @@ public class GamePlatform {
         }
     }
 
-    public static class LauncherButton extends JButton implements MouseListener {
+    public static class LauncherButton extends JButton implements MouseListener
+    {
         String title;
         String text;
         String text_hover;
@@ -181,7 +303,8 @@ public class GamePlatform {
         boolean click = false;
 
 
-        public LauncherButton(String text) {
+        public LauncherButton(String text)
+        {
             this.title = text;
             this.text_hover = "Play " + text;
             this.text = text;
@@ -213,7 +336,8 @@ public class GamePlatform {
         }
 
         @Override
-        public void mouseEntered(MouseEvent e) {
+        public void mouseEntered(MouseEvent e)
+        {
             hover = true;
             setText(text_hover);
             setBorder(new LineBorder(Color.green, 3));
@@ -221,7 +345,8 @@ public class GamePlatform {
         }
 
         @Override
-        public void mouseExited(MouseEvent e) {
+        public void mouseExited(MouseEvent e)
+        {
             hover = false;
             setText(text);
             setBorder(new LineBorder(Color.white, 3));
@@ -235,7 +360,8 @@ public class GamePlatform {
         }
 
         @Override
-        public void mouseReleased(MouseEvent e) {
+        public void mouseReleased(MouseEvent e)
+        {
             click = false;
             launch();
         }
@@ -244,9 +370,11 @@ public class GamePlatform {
         public void mouseClicked(MouseEvent e) {
             launch();
         }
-        public void launch() {
+        public void launch()
+        {
             if (gui.getComponents().length > 1) {gui.remove(1);}
-            switch (title) {
+            switch (title)
+            {
                 case "Even & Odd": new EOSolitaire(game_menu_width, game_menu_height, frame);
                     break;
                 case "Klondike": new KSolitaire(game_menu_width, game_menu_height, frame);
@@ -265,7 +393,8 @@ public class GamePlatform {
         }
     }
 
-    public static class StatisticsButton extends JButton implements MouseListener {
+    public static class StatisticsButton extends JButton implements MouseListener
+    {
         String title;
         String text;
         String text_hover;
@@ -273,7 +402,8 @@ public class GamePlatform {
         boolean hover = false;
         boolean click = false;
 
-        public StatisticsButton(String text) {
+        public StatisticsButton(String text)
+        {
             this.title = text;
             this.text = text+" statistics";
             this.text_hover = "View statistics";
@@ -305,7 +435,8 @@ public class GamePlatform {
         }
 
         @Override
-        public void mouseEntered(MouseEvent e) {
+        public void mouseEntered(MouseEvent e)
+        {
             hover = true;
             setText(text_hover);
             setBorder(new LineBorder(Color.green, 3));
@@ -313,7 +444,8 @@ public class GamePlatform {
         }
 
         @Override
-        public void mouseExited(MouseEvent e) {
+        public void mouseExited(MouseEvent e)
+        {
             hover = false;
             setText(text);
             setBorder(new LineBorder(Color.white, 3));
@@ -326,7 +458,8 @@ public class GamePlatform {
         }
 
         @Override
-        public void mouseReleased(MouseEvent e) {
+        public void mouseReleased(MouseEvent e)
+        {
             click = false;
             showStatisticsTable();
         }
@@ -335,10 +468,12 @@ public class GamePlatform {
         public void mouseClicked(MouseEvent e) {
             showStatisticsTable();
         }
-        public void showStatisticsTable() {
+        public void showStatisticsTable()
+        {
             if (gui.getComponents().length > 1) {gui.remove(1);}
             int i=0;
-            switch (title) {
+            switch (title)
+            {
                 case "Even & Odd" -> getStatisticsTable(runningEOStats);
                 case "Klondike" -> getStatisticsTable(runningKStats);
                 case "Eagle Wing" -> getStatisticsTable(runningEWStats);
@@ -350,10 +485,12 @@ public class GamePlatform {
             gui.revalidate();
         }
 
-        public void getStatisticsTable(ArrayList<String[]> data) {
+        public void getStatisticsTable(ArrayList<String[]> data)
+        {
             int i=0;
             Object[][] statistics_data = new Object[data.size()][4];
-            for (String[] str : data) {
+            for (String[] str : data)
+            {
                 statistics_data[i++] = Arrays.copyOfRange(str, 1, str.length);
             }
             statistics_table = new JTable(statistics_data, statistics_table_column_names);
@@ -363,8 +500,10 @@ public class GamePlatform {
         }
     }
 
-    public static void saveScore(int time, int score, boolean win, String title) {
-        switch(title) {
+    public static void saveScore(int time, int score, boolean win, String title)
+    {
+        switch(title)
+        {
             case "Even & Odd" -> runningEOStats.add(new String[]{"EO",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
             case "Klondike" -> runningKStats.add(new String[]{"K",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
             case "Eagle Wing" -> runningEWStats.add(new String[]{"EW",win?"Win":"Loss", Integer.toString(score), Integer.toString(time), new Date().toString()});
@@ -375,12 +514,15 @@ public class GamePlatform {
         write();
     }
 
-    private static void read() {
+    private static void read()
+    {
         try {
             Scanner scanner = new Scanner(new File("stats.txt"));
-            while (scanner.hasNextLine()) {
+            while (scanner.hasNextLine())
+            {
                 String[] arr = scanner.nextLine().split(":", 5);
-                switch (arr[0]) {
+                switch (arr[0])
+                {
                     case "EO" -> runningEOStats.add(arr);
                     case "K" -> runningKStats.add(arr);
                     case "EW" -> runningEWStats.add(arr);
@@ -395,35 +537,44 @@ public class GamePlatform {
         }
     }
 
-    private static void write() {
-        try (BufferedWriter outputWriter = new BufferedWriter(new FileWriter("stats.txt"))) {
-            for (String[] str : runningEOStats) {
+    private static void write()
+    {
+        try (BufferedWriter outputWriter = new BufferedWriter(new FileWriter("stats.txt")))
+        {
+            for (String[] str : runningEOStats)
+            {
                 outputWriter.write(String.join(":",str));
                 outputWriter.newLine();
             }
-            for (String[] str : runningKStats) {
+            for (String[] str : runningKStats)
+            {
                 outputWriter.write(String.join(":",str));
                 outputWriter.newLine();
             }
-            for (String[] str : runningEWStats) {
+            for (String[] str : runningEWStats)
+            {
                 outputWriter.write(String.join(":",str));
                 outputWriter.newLine();
             }
-            for (String[] str : runningEStats) {
+            for (String[] str : runningEStats)
+            {
                 outputWriter.write(String.join(":",str));
                 outputWriter.newLine();
             }
-            for (String[] str : runningEOffStats) {
+            for (String[] str : runningEOffStats)
+            {
                 outputWriter.write(String.join(":",str));
                 outputWriter.newLine();
             }
-            for (String[] str : runningExStats) {
+            for (String[] str : runningExStats)
+            {
                 outputWriter.write(String.join(":",str));
                 outputWriter.newLine();
             }
             outputWriter.flush();
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             System.out.println("Failed to write\n" + e);
         }
     }
