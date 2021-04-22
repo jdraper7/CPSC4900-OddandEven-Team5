@@ -15,12 +15,12 @@ This app is a game platform for variants of the solitaire card game.
 
 ## Get started
 #### To Clone this repo:
+- These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-    $ git clone https://github.com/jdraper7/CPSC4900-OddandEven-Team5
+      $ git clone https://github.com/jdraper7/CPSC4900-OddandEven-Team5
 
 
 #### To set this as your upstream for your fork:
-- These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 
     $git remote add upstream https://github.com/jdraper7/CPSC4900-OddandEven-Team5.git
