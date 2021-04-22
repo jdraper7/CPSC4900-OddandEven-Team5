@@ -2,7 +2,7 @@
 
 This app is a game platform for variants of the solitaire card game.
 
-###notes:
+### notes:
 - It includes a game platform for launching instances of card games; as well as a functioning demo of "Even and Odd" and "Klondike*".
 
 - Place holder buttons have been made for launching additional games and may be added later.
@@ -14,12 +14,12 @@ This app is a game platform for variants of the solitaire card game.
 ***
 
 ## Get started
-####To Clone this repo:
+#### To Clone this repo:
 
     $ git clone https://github.com/jdraper7/CPSC4900-OddandEven-Team5
 
 
-####To set this as your upstream for your fork:
+#### To set this as your upstream for your fork:
 - These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 
@@ -28,19 +28,19 @@ This app is a game platform for variants of the solitaire card game.
     $git checkout master
     $git merge upstream/master
 
-####To run an early demo of the game:
+#### To run an early demo of the game:
 - Run the "CPSC4900-OddandEven.jar" executable found in filepath: 4900 Team 5 SP21 Software\Software\Executables
 
-####A current development build of the game can be ran by:
+#### A current development build of the game can be ran by:
 - Running the GamePlatform.java file in the root directory
 
-####Enjoy!
+#### Enjoy!
    
 ***
 
 ## Installation
 
-###System Requirements
+### System Requirements
 
 #### Development tools:
   - An IDE:
@@ -51,10 +51,10 @@ This app is a game platform for variants of the solitaire card game.
     - https://www.oracle.com/java/technologies/javase-downloads.html
     - https://www.java.com/en/download/manual.jsp
 
-####Testing tools:
+#### Testing tools:
  - JUnit5.4
 
-####For the demo:
+#### For the demo:
 
  - Have Java and/or the latest Java Development Kit (JDK) installed on your PC.
 
@@ -63,9 +63,9 @@ This app is a game platform for variants of the solitaire card game.
 
 ***
 
-##Deployment
+## Deployment
 
-####For Creating a jar file:
+#### For Creating a jar file:
 
 Instructions for creating your own jar file for use outside of an IDE can be found at:
 - https://www.jetbrains.com/help/idea/compiling-applications.html#compilation_output_folders
@@ -91,7 +91,7 @@ button on the bottom left of the interface.
 >
 >To start a new game press the "New Game" button."
 
-###Team members:
+### Team members:
 - John Draper
 - Sky Love
 - David Mehovic
@@ -99,7 +99,7 @@ button on the bottom left of the interface.
 - Jesus Patino 
 - Ariana Yerg
 
-###Instructor:
+### Instructor:
 - Russell Hare 
 
 ***
