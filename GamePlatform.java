@@ -548,24 +548,25 @@ public class GamePlatform {
     }
     private static void readFavorites()
     {
-        //FAVORITES
-        try {
+        try
+        {
             Scanner scanner = new Scanner(new File("favorites.txt"));
             while (scanner.hasNextLine())
             {
                 String[] arr = scanner.nextLine().split(":");
                 switch (arr[0])
                 {
-                    case "EO" : eodd.setSelected(arr[1].equals(arr[1])?true:false);
-                    case "K" : kl.setSelected(arr[1].equals(arr[1])?true:false);
-                    case "EW" : ew.setSelected(arr[1].equals(arr[1])?true:false);
-                    case "EH" : eh.setSelected(arr[1].equals(arr[1])?true:false);
-                    case "EOff" : eoff.setSelected(arr[1].equals(arr[1])?true:false);
-                    case "Ex" : ex.setSelected(arr[1].equals(arr[1])?true:false);
+                    case "eodd" : eodd.setSelected(arr[1].equals("true")?true:false);
+                    case "kl" : kl.setSelected(arr[1].equals("true")?true:false);
+                    case "ew" : ew.setSelected(arr[1].equals("true")?true:false);
+                    case "eh" : eh.setSelected(arr[1].equals("true")?true:false);
+                    case "eoff" : eoff.setSelected(arr[1].equals("true")?true:false);
+                    case "ex" : ex.setSelected(arr[1].equals("true")?true:false);
                 }
             }
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             System.out.println("Failed to read favorites\n" + e);
         }
     }
