@@ -3,9 +3,9 @@
 This app is a game platform for variants of the solitaire card game.
 
 ### Platform screen capture:
-[![platform view](/assets/images/repo/platform_view.png "platform")]
+[![platform view](/assets/repo/platform_view.png "platform")](https://github.com/jdraper7/CPSC4900-OddandEven-Team5/tree/master/assets/repo/platform_view.png)
 ## Even and Odd screen capture:
-[![game view](/assets/images/repo/even_and_odd_view.png "game")]
+[![game view](/assets/repo/even_and_odd_view.png "game")](https://github.com/jdraper7/CPSC4900-OddandEven-Team5/tree/master/assets/repo/even_and_odd_view.png)
 
 ### notes:
 - It includes a game platform for launching instances of card games; as well as a functioning demo of "Even and Odd" and "Klondike*".
