@@ -25,12 +25,12 @@ public class GamePlatform {
     //Menu Bar
     protected static JMenuBar mbar = new JMenuBar();
     protected static JMenu favs = new JMenu("Favorites");
-    protected static JCheckBoxMenuItem eodd = new JCheckBoxMenuItem("Even and Odd");
-    protected static JCheckBoxMenuItem kl = new JCheckBoxMenuItem("Klondike");
-    protected static JCheckBoxMenuItem ew = new JCheckBoxMenuItem("Eagle Wing");
-    protected static JCheckBoxMenuItem eh = new JCheckBoxMenuItem("Easthaven");
-    protected static JCheckBoxMenuItem eoff = new JCheckBoxMenuItem("Eight Off");
-    protected static JCheckBoxMenuItem ex = new JCheckBoxMenuItem("Exit");
+    protected static JCheckBoxMenuItem eodd = new JCheckBoxMenuItem("Even and Odd",true);
+    protected static JCheckBoxMenuItem kl = new JCheckBoxMenuItem("Klondike",true);
+    protected static JCheckBoxMenuItem ew = new JCheckBoxMenuItem("Eagle Wing",true);
+    protected static JCheckBoxMenuItem eh = new JCheckBoxMenuItem("Easthaven",true);
+    protected static JCheckBoxMenuItem eoff = new JCheckBoxMenuItem("Eight Off",true);
+    protected static JCheckBoxMenuItem ex = new JCheckBoxMenuItem("Exit",true);
 
     private static final int game_menu_height = EOCard.CARD_HEIGHT * 4+150;
     private static final int game_menu_width = (EOCard.CARD_WIDTH * 12) + 140;
@@ -124,6 +124,7 @@ public class GamePlatform {
         game_menu.add(statistics_Exit);
 
         //Menu Bar (Favorite Games)
+        UIManager.put("CheckBoxMenuItem.doNotCloseOnMouseClick", true); //prevents menu from closing after each click
         favs.add(eodd);
         eodd.addItemListener(new ItemListener() {
             @Override
@@ -131,14 +132,15 @@ public class GamePlatform {
             {
                 if(eodd.isSelected())
                 {
-                    launcher_EvenAndOdd.setVisible(false);
-                    statistics_EvenAndOdd.setVisible(false);
-                }
-                else
-                {
                     launcher_EvenAndOdd.setVisible(true);
                     statistics_EvenAndOdd.setVisible(true);
                 }
+                else
+                {
+                    launcher_EvenAndOdd.setVisible(false);
+                    statistics_EvenAndOdd.setVisible(false);
+                }
+                saveFavorites();
             }
         });
         favs.add(kl);
@@ -148,14 +150,15 @@ public class GamePlatform {
             {
                 if(kl.isSelected())
                 {
-                    launcher_Klondike.setVisible(false);
-                    statistics_Klondike.setVisible(false);
-                }
-                else
-                {
                     launcher_Klondike.setVisible(true);
                     statistics_Klondike.setVisible(true);
                 }
+                else
+                {
+                    launcher_Klondike.setVisible(false);
+                    statistics_Klondike.setVisible(false);
+                }
+                saveFavorites();
             }
         });
         favs.add(ew);
@@ -165,14 +168,15 @@ public class GamePlatform {
             {
                 if(ew.isSelected())
                 {
-                    launcher_EagleWing.setVisible(false);
-                    statistics_EagleWing.setVisible(false);
-                }
-                else
-                {
                     launcher_EagleWing.setVisible(true);
                     statistics_EagleWing.setVisible(true);
                 }
+                else
+                {
+                    launcher_EagleWing.setVisible(false);
+                    statistics_EagleWing.setVisible(false);
+                }
+                saveFavorites();
             }
         });
         favs.add(eh);
@@ -182,14 +186,15 @@ public class GamePlatform {
             {
                 if(eh.isSelected())
                 {
-                    launcher_Easthaven.setVisible(false);
-                    statistics_Easthaven.setVisible(false);
-                }
-                else
-                {
                     launcher_Easthaven.setVisible(true);
                     statistics_Easthaven.setVisible(true);
                 }
+                else
+                {
+                    launcher_Easthaven.setVisible(false);
+                    statistics_Easthaven.setVisible(false);
+                }
+                saveFavorites();
             }
         });
         favs.add(eoff);
@@ -199,14 +204,15 @@ public class GamePlatform {
             {
                 if(eoff.isSelected())
                 {
-                    launcher_EightOff.setVisible(false);
-                    statistics_EightOff.setVisible(false);
-                }
-                else
-                {
                     launcher_EightOff.setVisible(true);
                     statistics_EightOff.setVisible(true);
                 }
+                else
+                {
+                    launcher_EightOff.setVisible(false);
+                    statistics_EightOff.setVisible(false);
+                }
+                saveFavorites();
             }
         });
         favs.add(ex);
@@ -216,19 +222,22 @@ public class GamePlatform {
             {
                 if(ex.isSelected())
                 {
-                    launcher_Exit.setVisible(false);
-                    statistics_Exit.setVisible(false);
-                }
-                else
-                {
                     launcher_Exit.setVisible(true);
                     statistics_Exit.setVisible(true);
                 }
+                else
+                {
+                    launcher_Exit.setVisible(false);
+                    statistics_Exit.setVisible(false);
+                }
+                saveFavorites();
             }
         });
         mbar.add(favs);
         frame.setJMenuBar(mbar);
+        readFavorites();
 
+        //Update GUI
         gui.repaint();
         game_menu.repaint();
 
@@ -516,6 +525,7 @@ public class GamePlatform {
 
     private static void read()
     {
+        //STATS
         try {
             Scanner scanner = new Scanner(new File("stats.txt"));
             while (scanner.hasNextLine())
@@ -534,6 +544,29 @@ public class GamePlatform {
         }
         catch (Exception e) {
             System.out.println("Failed to read\n" + e);
+        }
+    }
+    private static void readFavorites()
+    {
+        //FAVORITES
+        try {
+            Scanner scanner = new Scanner(new File("favorites.txt"));
+            while (scanner.hasNextLine())
+            {
+                String[] arr = scanner.nextLine().split(":");
+                switch (arr[0])
+                {
+                    case "EO" : eodd.setSelected(arr[1].equals(arr[1])?true:false);
+                    case "K" : kl.setSelected(arr[1].equals(arr[1])?true:false);
+                    case "EW" : ew.setSelected(arr[1].equals(arr[1])?true:false);
+                    case "EH" : eh.setSelected(arr[1].equals(arr[1])?true:false);
+                    case "EOff" : eoff.setSelected(arr[1].equals(arr[1])?true:false);
+                    case "Ex" : ex.setSelected(arr[1].equals(arr[1])?true:false);
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Failed to read favorites\n" + e);
         }
     }
 
@@ -576,6 +609,29 @@ public class GamePlatform {
         catch (Exception e)
         {
             System.out.println("Failed to write\n" + e);
+        }
+    }
+    private static void saveFavorites()
+    {
+        try (BufferedWriter outputWriter = new BufferedWriter(new FileWriter("favorites.txt")))
+        {
+            outputWriter.write(eodd.isSelected()?"eodd:true":"eodd:false");
+            outputWriter.newLine();
+            outputWriter.write(kl.isSelected()?"kl:true":"kl:false");
+            outputWriter.newLine();
+            outputWriter.write(ew.isSelected()?"ew:true":"ew:false");
+            outputWriter.newLine();
+            outputWriter.write(eh.isSelected()?"eh:true":"eh:false");
+            outputWriter.newLine();
+            outputWriter.write(eoff.isSelected()?"eoff:true":"eoff:false");
+            outputWriter.newLine();
+            outputWriter.write(ex.isSelected()?"ex:true":"ex:false");
+            outputWriter.newLine();
+            outputWriter.flush();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Failed to save favorites\n" + e);
         }
     }
 }
