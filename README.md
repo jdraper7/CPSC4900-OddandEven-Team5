@@ -12,12 +12,18 @@ This app is a game platform for variants of the solitaire card game.
 -*Klondike was not developed by out team. It was developed by ShamariFeaster. The repository can be found here. https://github.com/ShamariFeaster/MySolitaire/blob/master/Solitaire.java
 
 ## Get started
+###Clone this repo:
 
-...
-$ git clone https://github.com/jdraper7/CPSC4900-OddandEven-Team5
-'''
+    $ git clone https://github.com/jdraper7/CPSC4900-OddandEven-Team5
 
+
+###Set this as your upstream for your fork
 -These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+    $git remote add upstream https://github.com/jdraper7/CPSC4900-OddandEven-Team5.git
+    $git fetch upstream
+    $git checkout master
+    $git merge upstream/master
 
 ###To run an early demo of the game:
 Run the "CPSC4900-OddandEven.jar" executable found in filepath: 4900 Team 5 SP21 Software\Software\Executables
