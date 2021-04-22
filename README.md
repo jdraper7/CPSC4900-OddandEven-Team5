@@ -2,6 +2,11 @@
 
 This app is a game platform for variants of the solitaire card game.
 
+### Platform screen capture:
+[![platform view](/assets/images/repo/platform_view.png "platform")]
+## Even and Odd screen capture:
+[![game view](/assets/images/repo/even_and_odd_view.png "game")]
+
 ### notes:
 - It includes a game platform for launching instances of card games; as well as a functioning demo of "Even and Odd" and "Klondike*".
 
